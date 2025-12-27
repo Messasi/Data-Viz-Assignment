@@ -1,0 +1,517 @@
+/* ===================================
+   MobileMatrix Custom Styles
+   Purple Theme with Smooth Transitions
+   =================================== */
+
+/* Import DaisyUI Themes with Purple Customization */
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+@import url('https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css');
+
+/* Root Variables for Custom Purple Theme */
+:root {
+    --animation-duration: 300ms;
+}
+
+/* DaisyUI Theme Customization */
+[data-theme="light"] {
+    --primary: #9333ea;           /* Purple 600 */
+    --primary-focus: #c7a0ea;     /* Purple 700 */
+    --primary-content: #ffffff;
+    
+    --secondary: #ec4899;         /* Pink 600 */
+    --secondary-focus: #db2777;   /* Pink 700 */
+    --secondary-content: #ffffff;
+    
+    --accent: #3b82f6;            /* Blue 600 */
+    --accent-focus: #2563eb;      /* Blue 700 */
+    --accent-content: #ffffff;
+    
+    --neutral: #6b7280;           /* Gray 500 */
+    --neutral-focus: #4b5563;     /* Gray 600 */
+    --neutral-content: #ffffff;
+    
+    --base-100: #ffffff;
+    --base-200: #f3f4f6;          /* Gray 100 */
+    --base-300: #e5e7eb;          /* Gray 200 */
+    --base-content: #1f2937;      /* Gray 800 */
+    
+    --info: #3b82f6;              /* Blue 600 */
+    --success: #10b981;           /* Green 500 */
+    --warning: #f59e0b;           /* Amber 500 */
+    --error: #ef4444;             /* Red 500 */
+}
+
+[data-theme="dark"] {
+    --primary: #a855f7;           /* Purple 500 */
+    --primary-focus: #9333ea;     /* Purple 600 */
+    --primary-content: #ffffff;
+    
+    --secondary: #f472b6;         /* Pink 500 */
+    --secondary-focus: #ec4899;   /* Pink 600 */
+    --secondary-content: #ffffff;
+    
+    --accent: #60a5fa;            /* Blue 400 */
+    --accent-focus: #3b82f6;      /* Blue 600 */
+    --accent-content: #ffffff;
+    
+    --neutral: #374151;           /* Gray 700 */
+    --neutral-focus: #1f2937;     /* Gray 800 */
+    --neutral-content: #e5e7eb;
+    
+    --base-100: #1f2937;          /* Gray 800 */
+    --base-200: #111827;          /* Gray 900 */
+    --base-300: #0f172a;          /* Slate 900 */
+    --base-content: #f3f4f6;      /* Gray 100 */
+    
+    --info: #60a5fa;              /* Blue 400 */
+    --success: #34d399;           /* Green 400 */
+    --warning: #fbbf24;           /* Amber 400 */
+    --error: #f87171;             /* Red 400 */
+}
+
+/* Smooth Transitions for Theme Switching */
+html,
+body,
+nav,
+main,
+footer,
+.card,
+.alert,
+.btn,
+.input,
+.select,
+.table,
+.navbar,
+.menu,
+.dropdown-content {
+    transition: background-color var(--animation-duration) ease-in-out,
+                color var(--animation-duration) ease-in-out,
+                border-color var(--animation-duration) ease-in-out;
+}
+
+/* Global Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--base-200);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-focus);
+}
+
+/* Firefox Scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) var(--base-200);
+}
+
+/* Active Page Indicator */
+.active-page {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%) !important;
+    color: white !important;
+    font-weight: 600;
+}
+
+/* Mobile Menu Active Link */
+.menu li > a.active {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    font-weight: 600;
+}
+
+/* Gradient Text */
+.gradient-text {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Card Hover Effects */
+.card {
+    transition: transform 200ms ease-in-out, box-shadow 200ms ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(147, 51, 234, 0.2),
+                0 10px 10px -5px rgba(147, 51, 234, 0.1);
+}
+
+/* Button Hover Effects */
+.btn {
+    transition: all 200ms ease-in-out;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Phone Card Styles */
+.phone-card {
+    background: var(--base-100);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    border: 2px solid var(--base-300);
+    transition: all 200ms ease-in-out;
+    cursor: pointer;
+}
+
+.phone-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(147, 51, 234, 0.15);
+}
+
+.phone-card.selected {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, 
+                rgba(147, 51, 234, 0.05) 0%, 
+                rgba(236, 72, 153, 0.05) 100%);
+}
+
+/* Table Styles */
+.table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--primary);
+    color: white;
+    font-weight: 600;
+}
+
+.table tbody tr {
+    transition: background-color 150ms ease-in-out;
+}
+
+.table tbody tr:hover {
+    background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(147, 51, 234, 0.05) 50%, 
+                transparent 100%);
+}
+
+/* Sort Icons */
+th[data-sort] {
+    user-select: none;
+}
+
+th[data-sort]:hover {
+    background: var(--primary-focus) !important;
+}
+
+th[data-order="asc"] .fa-sort::before {
+    content: "\f160"; /* fa-sort-up */
+}
+
+th[data-order="desc"] .fa-sort::before {
+    content: "\f161"; /* fa-sort-down */
+}
+
+/* Mobile Card View */
+.mobile-spec-card {
+    background: var(--base-100);
+    border: 2px solid var(--base-300);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: all 200ms ease-in-out;
+}
+
+.mobile-spec-card:hover {
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(147, 51, 234, 0.15);
+}
+
+/* Chart Container */
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Loading State */
+.loading-spinner {
+    color: var(--primary);
+}
+
+/* Stats Styling */
+.stat {
+    transition: all 200ms ease-in-out;
+}
+
+.stat:hover {
+    transform: scale(1.05);
+}
+
+.stat-value {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Badge Styling */
+.badge {
+    transition: all 200ms ease-in-out;
+}
+
+.badge:hover {
+    transform: scale(1.05);
+}
+
+/* Alert Styling */
+.alert {
+    border-left: 4px solid var(--primary);
+}
+
+/* Input Focus Styles */
+.input:focus,
+.select:focus,
+.textarea:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    border-color: var(--primary);
+}
+
+/* Dropdown Menu */
+.dropdown-content {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Animation Classes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 400ms ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.slide-in-right {
+    animation: slideInRight 400ms ease-out;
+}
+
+/* Pulse Animation for Hero Icon */
+@keyframes pulse-purple {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 20px rgba(147, 51, 234, 0);
+    }
+}
+
+.animate-pulse {
+    animation: pulse-purple 2s infinite;
+}
+
+/* Responsive Utilities */
+@media (max-width: 768px) {
+    /* Adjust heading sizes */
+    h1 {
+        font-size: 2rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    /* Stack cards vertically */
+    .phone-card {
+        width: 100%;
+    }
+    
+    /* Reduce padding */
+    .card-body {
+        padding: 1rem;
+    }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .btn,
+    .input,
+    .select,
+    .card {
+        border-width: 2px;
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .navbar,
+    .footer,
+    .btn,
+    .theme-toggle {
+        display: none;
+    }
+    
+    body {
+        background: white;
+        color: black;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+}
+
+/* Accessibility: Focus Visible */
+*:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 3px;
+}
+
+/* Skip to Content Link */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    background: var(--primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    z-index: 100;
+    border-radius: 0 0 0.5rem 0;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* Custom Checkbox/Radio Styling */
+.checkbox:checked,
+.radio:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* Toast Notifications (if implemented) */
+.toast {
+    background: var(--base-100);
+    border-left: 4px solid var(--primary);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Selected Phone Badge */
+.selected-badge {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+}
+
+/* No Results Message */
+.no-results {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--base-content);
+    opacity: 0.7;
+}
+
+.no-results i {
+    font-size: 4rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+/* Comparison Chart Legend */
+.chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.chart-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.chart-legend-color {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 0.25rem;
+}
+
+/* Export Button Loading State */
+.btn.loading::after {
+    border-color: white transparent transparent transparent;
+}
+
+/* Table Responsive Wrapper */
+.table-wrapper {
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+/* Gradient Backgrounds */
+.gradient-bg-purple {
+    background: linear-gradient(135deg, #667eea 0%, #e0d4eb 100%);
+}
+
+.gradient-bg-pink {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.gradient-bg-blue {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+} 

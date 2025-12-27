@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Specifications - MobileMatrix</title>
+    
+    <!-- Google Fonts - Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+<body class="transition-colors duration-300">
+    <!-- Navigation -->
+    <nav class="navbar bg-base-100 shadow-lg px-4 lg:px-8 sticky top-0 z-50 transition-colors duration-300">
+        <div class="navbar-start">
+            <div class="dropdown lg:hidden">
+                <label tabindex="0" class="btn btn-ghost btn-circle">
+                    <i class="fas fa-bars text-xl"></i>
+                </label>
+                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-lg bg-base-100 rounded-box w-52">
+                    <li><a href="index.html"><i class="fas fa-home mr-2"></i>Home</a></li>
+                    <li><a href="comparison.html"><i class="fas fa-balance-scale mr-2"></i>Comparison</a></li>
+                    <li><a href="specifications.html" class="active"><i class="fas fa-table mr-2"></i>Specifications</a></li>
+                </ul>
+            </div>
+            <a href="index.html" class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                <i class="fas fa-mobile-alt mr-2"></i>MobileMatrix
+            </a>
+        </div>
+        
+        <!-- Desktop Navigation -->
+        <div class="navbar-center hidden lg:flex">
+            <ul class="menu menu-horizontal px-1 gap-2">
+                <li><a href="index.html" class="btn btn-ghost btn-sm"><i class="fas fa-home mr-2"></i>Home</a></li>
+                <li><a href="comparison.html" class="btn btn-ghost btn-sm"><i class="fas fa-balance-scale mr-2"></i>Comparison</a></li>
+                <li><a href="specifications.html" class="btn btn-ghost btn-sm active-page"><i class="fas fa-table mr-2"></i>Specifications</a></li>
+            </ul>
+        </div>
+        
+        <div class="navbar-end">
+            <!-- Theme Toggle -->
+            <label class="swap swap-rotate btn btn-ghost btn-circle">
+                <input type="checkbox" id="themeToggle" />
+                <i class="fas fa-sun swap-on text-xl"></i>
+                <i class="fas fa-moon swap-off text-xl"></i>
+            </label>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="min-h-screen bg-base-200 transition-colors duration-300">
+        <!-- Page Header -->
+        <div class="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-8 px-4">
+            <div class="container mx-auto">
+                <h1 class="text-3xl md:text-4xl font-bold mb-2">
+                    <i class="fas fa-table mr-3"></i>Detailed Specifications
+                </h1>
+                <p class="text-purple-100 text-sm md:text-base">Complete technical specifications for all smartphones</p>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 py-8">
+            <!-- Controls -->
+            <div class="card bg-base-100 shadow-xl mb-6 transition-colors duration-300">
+                <div class="card-body">
+                    <div class="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+                        <!-- Search -->
+                        <div class="form-control w-full md:w-auto flex-1">
+                            <div class="input-group">
+                                <input type="text" id="tableSearch" placeholder="Search specifications..." class="input input-bordered w-full" />
+                                <button class="btn btn-square btn-primary">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Export Button -->
+                        <button id="exportCSV" class="btn btn-primary gap-2 w-full md:w-auto">
+                            <i class="fas fa-download"></i>
+                            Export CSV
+                        </button>
+                    </div>
+
+                    <!-- Results Info -->
+                    <div class="mt-4">
+                        <div class="stats shadow w-full">
+                            <div class="stat">
+                                <div class="stat-title">Showing</div>
+                                <div class="stat-value text-2xl text-purple-600">
+                                    <span id="tableResultCount">0</span>/<span id="tableTotalCount">20</span>
+                                </div>
+                                <div class="stat-desc">smartphones</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Card -->
+            <div class="card bg-base-100 shadow-xl transition-colors duration-300">
+                <div class="card-body p-0">
+                    <!-- Desktop Table View -->
+                    <div class="overflow-x-auto hidden md:block">
+                        <table id="specificationsTable" class="table table-zebra table-pin-rows">
+                            <thead>
+                                <tr class="bg-purple-600 text-white">
+                                    <th class="cursor-pointer hover:bg-purple-700 transition-colors" data-sort="brand">
+                                        Brand <i class="fas fa-sort ml-2"></i>
+                                    </th>
+                                    <th class="cursor-pointer hover:bg-purple-700 transition-colors" data-sort="model">
+                                        Model <i class="fas fa-sort ml-2"></i>
+                                    </th>
+                                    <th class="cursor-pointer hover:bg-purple-700 transition-colors" data-sort="price">
+                                        Price <i class="fas fa-sort ml-2"></i>
+                                    </th>
+                                    <th class="cursor-pointer hover:bg-purple-700 transition-colors" data-sort="ram_gb">
+                                        RAM <i class="fas fa-sort ml-2"></i>
+                                    </th>
+                                    <th class="cursor-pointer hover:bg-purple-700 transition-colors" data-sort="storage_gb">
+                                        Storage <i class="fas fa-sort ml-2"></i>
+                                    </th>
+                                    <th class="cursor-pointer hover:bg-purple-700 transition-colors" data-sort="battery_mah">
+                                        Battery <i class="fas fa-sort ml-2"></i>
+                                    </th>
+                                    <th class="cursor-pointer hover:bg-purple-700 transition-colors" data-sort="display_inches">
+                                        Display <i class="fas fa-sort ml-2"></i>
+                                    </th>
+                                    <th class="cursor-pointer hover:bg-purple-700 transition-colors" data-sort="camera_mp">
+                                        Camera <i class="fas fa-sort ml-2"></i>
+                                    </th>
+                                    <th class="cursor-pointer hover:bg-purple-700 transition-colors" data-sort="processor">
+                                        Processor <i class="fas fa-sort ml-2"></i>
+                                    </th>
+                                    <th class="cursor-pointer hover:bg-purple-700 transition-colors" data-sort="os">
+                                        OS <i class="fas fa-sort ml-2"></i>
+                                    </th>
+                                    <th class="cursor-pointer hover:bg-purple-700 transition-colors" data-sort="release_date">
+                                        Release <i class="fas fa-sort ml-2"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <!-- Table rows will be inserted here -->
+                                <tr>
+                                    <td colspan="11" class="text-center py-8">
+                                        <span class="loading loading-spinner loading-lg text-purple-600"></span>
+                                        <p class="mt-4 text-base-content/60">Loading specifications...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Mobile Card View -->
+                    <div id="mobileCardContainer" class="md:hidden p-4 space-y-4">
+                        <!-- Mobile cards will be inserted here -->
+                        <div class="text-center py-8">
+                            <span class="loading loading-spinner loading-lg text-purple-600"></span>
+                            <p class="mt-4 text-base-content/60">Loading specifications...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="alert alert-info shadow-lg mt-6 transition-colors duration-300">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <h3 class="font-bold">How to use</h3>
+                    <div class="text-xs">
+                        Click column headers to sort | Use search to filter | Export data as CSV
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer footer-center p-6 bg-base-200 text-base-content transition-colors duration-300">
+        <aside>
+            <p class="font-semibold">
+                <i class="fas fa-mobile-alt text-purple-600 mr-2"></i>
+                MobileMatrix - Smartphone Comparison Dashboard
+            </p>
+            <p class="text-sm opacity-70">Making phone comparisons simple and visual</p>
+            <p class="text-xs opacity-50 mt-2">© 2025 MobileMatrix. All rights reserved.</p>
+        </aside>
+    </footer>
+
+    <!-- Theme Toggle Script -->
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        // Check for saved theme preference
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', currentTheme);
+        themeToggle.checked = currentTheme === 'dark';
+        
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    </script>
+
+    <!-- Placeholder for table.js -->
+    <script src="js/utils.js"></script>
+    <script src="js/table.js"></script>
+</body>
+</html>

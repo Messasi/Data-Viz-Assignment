@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MobileMatrix - Smartphone Comparison Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+<body class="transition-colors duration-300">
+    <!-- Navbar -->
+    <nav class="navbar bg-base-100 shadow-lg px-4 lg:px-8 sticky top-0 z-50">
+
+    <!-- LEFT -->
+    <div class="navbar-start">
+        <!-- Mobile hamburger -->
+        <div class="dropdown lg:hidden">
+            <label tabindex="0" class="btn btn-ghost btn-circle">
+                <i class="fas fa-bars text-xl"></i>
+            </label>
+            <ul tabindex="0"
+                class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-lg bg-base-100 rounded-box w-52">
+                <li><a href="index.html"><i class="fas fa-home mr-2"></i>Home</a></li>
+                <li><a href="comparison.html"><i class="fas fa-balance-scale mr-2"></i>Comparison</a></li>
+                <li><a href="specifications.html"><i class="fas fa-table mr-2"></i>Specifications</a></li>
+            </ul>
+        </div>
+
+        <!-- Desktop logo -->
+        <a href="index.html"
+           class="hidden lg:flex items-center text-2xl font-bold
+                  bg-gradient-to-r from-purple-600 to-pink-600
+                  bg-clip-text text-transparent">
+            <i class="fas fa-mobile-alt mr-2"></i>
+            MobileMatrix
+        </a>
+    </div>
+
+    <!-- CENTER -->
+    <div class="navbar-center">
+        <!-- Mobile title -->
+        <a href="index.html"
+           class="lg:hidden text-xl font-bold
+                  bg-gradient-to-r from-purple-600 to-pink-600
+                  bg-clip-text text-transparent">
+            MobileMatrix
+        </a>
+
+        <!-- Desktop navigation -->
+        <ul class="hidden lg:flex menu menu-horizontal gap-2">
+            <li><a href="index.html" class="btn btn-ghost btn-sm active-page">Home</a></li>
+            <li><a href="comparison.html" class="btn btn-ghost btn-sm">Comparison</a></li>
+            <li><a href="specifications.html" class="btn btn-ghost btn-sm">Specifications</a></li>
+        </ul>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="navbar-end">
+        <label class="swap swap-rotate btn btn-ghost btn-circle">
+            <input type="checkbox" id="themeToggle" />
+            <i class="fas fa-sun swap-on text-xl"></i>
+            <i class="fas fa-moon swap-off text-xl"></i>
+        </label>
+    </div>
+</nav>
+
+
+    <!-- Hero Section -->
+    <main class="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-purple-900 dark:to-gray-900 transition-colors duration-300">
+        <div class="text-center max-w-4xl mx-auto space-y-8 py-12">
+           
+            <div class="flex justify-center mb-6">
+                <div class="bg-gradient-to-r from-purple-600 to-pink-600 p-6 rounded-full shadow-2xl animate-pulse">
+                    <i class="fas fa-mobile-alt text-6xl text-white"></i>
+                </div>
+            </div>
+            
+            
+            <h1 class="text-5xl md:text-7xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent leading-tight">
+                MobileMatrix
+            </h1>
+            
+            
+            <p class="text-xl md:text-2xl text-base-content/80 font-medium max-w-2xl mx-auto">
+                Compare smartphones with ease. Visualize specs, filter by features, and make informed decisions.
+            </p>
+            
+            <!-- The different features in the website  -->
+            <div class="flex flex-wrap justify-center gap-3 py-4">
+                <span class="badge badge-lg badge-primary gap-2">
+                    <i class="fas fa-chart-bar"></i>
+                    Interactive Charts
+                </span>
+                <span class="badge badge-lg badge-secondary gap-2">
+                    <i class="fas fa-filter"></i>
+                    Smart Filters
+                </span>
+                <span class="badge badge-lg badge-accent gap-2">
+                    <i class="fas fa-mobile-alt"></i>
+                    20+ Phones
+                </span>
+            </div>
+            
+            <!-- Start comaprison button  -->
+            <div class="pt-6">
+                <a href="comparison.html" class="btn btn-lg bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-none shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-rocket mr-2"></i>
+                    Start Comparison
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+            
+            <!-- Stats -->
+            <div class="grid grid-cols-3 gap-4 md:gap-8 pt-12 max-w-2xl mx-auto">
+                <div class="stat bg-base-100 rounded-box shadow-lg">
+                    <div class="stat-value text-purple-600 text-3xl md:text-4xl">20+</div>
+                    <div class="stat-title text-xs md:text-sm">Phones</div>
+                </div>
+                <div class="stat bg-base-100 rounded-box shadow-lg">
+                    <div class="stat-value text-pink-600 text-3xl md:text-4xl">10+</div>
+                    <div class="stat-title text-xs md:text-sm">Specs</div>
+                </div>
+                <div class="stat bg-base-100 rounded-box shadow-lg">
+                    <div class="stat-value text-blue-600 text-3xl md:text-4xl">5</div>
+                    <div class="stat-title text-xs md:text-sm">Compare</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer footer-center p-6 bg-base-200 text-base-content transition-colors duration-300">
+        <aside>
+            <p class="font-semibold">
+                <i class="fas fa-mobile-alt text-purple-600 mr-2"></i>
+                MobileMatrix - Smartphone Comparison Dashboard
+            </p>
+            <p class="text-sm opacity-70">Making phone comparisons simple and visual</p>
+            <p class="text-xs opacity-50 mt-2">© 2025 MobileMatrix. All rights reserved.</p>
+        </aside>
+    </footer>
+
+    
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        // Saving user theme preference in localStorage
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', currentTheme);
+        themeToggle.checked = currentTheme === 'dark';
+        
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    </script>
+</body>
+</html>
