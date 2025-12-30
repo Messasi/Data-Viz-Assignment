@@ -128,7 +128,7 @@ function toggleCompare(phoneId) {
     updateSelectedPhonesList();       // Updates the Sidebar 
 }
 
-// REPLACE your existing updateSelectedPhonesList function with this:
+
 function updateSelectedPhonesList() {
     const container = document.getElementById('selectedPhonesList');
     
@@ -156,11 +156,8 @@ function updateSelectedPhonesList() {
 }
 
 
-function updateSelectedCount() {
-    const counter = document.getElementById('selectedCount');
-    if (counter) {
-        counter.textContent = `Selected: ${selectedPhones.length}/5`;
-    }
+function updateSelectedCount() { 
+    document.getElementById('selectedCount').textContent = selectedPhones.length; 
 }
 
 function updateSelectedPhonesList() {
