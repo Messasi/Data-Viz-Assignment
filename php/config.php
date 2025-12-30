@@ -1,19 +1,25 @@
 <?php
-// Database information 
-$host = 'localhost';
-$db = 'mobilematrix_db';
-$user = 'root';
-$pass = '';
-$charset = 'utf8mb4';
+// Database configuration
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'mobilematrix_db');
+define('DB_USER', 'root');
+define('DB_PASS', ''); 
+define('DB_CHARSET', 'utf8mb4');
 
+//Get database connection
 function getDBConnection() {
-    global $host, $db, $user, $pass; //  global variables inside function
-
-    $conn = new mysqli($host, $user, $pass, $db);
-
+    // Create connection
+    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    
+    // Check connection
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        
+        error_log("Database connection failed: " . $conn->connect_error);
+        throw new Exception("Database connection failed");
     }
-
-    return $conn;   
+    
+    // Set charset to prevent sql injection attacks
+    $conn->set_charset(DB_CHARSET);
+    
+    return $conn;
 }
