@@ -16,18 +16,3 @@ fetch('../php/api.php?brand=Apple', { cache: "no-store" })
     })
     .catch(error => console.error('Fetch error:', error));
 
-
-console.log(formatPrice(999.99));
-console.log(formatDate('2023-09-22'));
-
-showLoading('testContainer');
-
-setTimeout(() => {
-    hideLoading('testContainer');
-    showError('This is a test error message.', 'testContainer');
-}, 1500);
-
-const debouncedFunction = debounce(() => console.log('Debounced fired'), 500);
-debouncedFunction();
-
-console.log('Helper functions executed');
