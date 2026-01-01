@@ -1,7 +1,7 @@
 //Global varaibles 
 const apiUrl = 'php/api.php';
 
-//Store all data from api 
+//Store all data from api   
 let allPhones = [];
 
 //store all selected phones for comparison
@@ -10,8 +10,11 @@ let selectedPhones = [];
 //run app when page loads 
 
 async function initApp() {
-    const data = await loadPhones(); //load phones from api
-    renderPhones(data); //render phones to UI
+    await loadPhones(); //load phones from api
+    renderPhones(allPhones); //render phones to UI
+    initFilters();
+    console.log("App initialized");
+    
 }
 
 //load phones 
@@ -92,18 +95,18 @@ function renderPhones(phones) {
 
 
 function toggleCompare(phoneId) {
-    
-    //Convert to string
+    // Convert to string for safe comparison
     const targetId = String(phoneId);
 
-    //Find if this phone is already selected 
+    // Find if this phone is already selected 
     const index = selectedPhones.findIndex(p => String(p.id) === targetId);
 
     if (index > -1) {
-        //Remove selected phone 
+        // Remove from selection
         selectedPhones.splice(index, 1);
+        console.log(`Removed phone ${phoneId} from comparison`);
     } else {
-        //add new phone 
+        // Add new phone
         
         // Check if we already have 5 phones
         if (selectedPhones.length >= 5) {
@@ -111,54 +114,35 @@ function toggleCompare(phoneId) {
             return;
         }
 
-        // Find the full phone object
+        // Find the full phone
         const phone = allPhones.find(p => String(p.id) === targetId);
         
-        if (phone) {// If found, add to selectedPhones
-            selectedPhones.push(phone); // Add to selected phones
+        if (phone) {
+            selectedPhones.push(phone);
+            console.log(`Added phone ${phoneId} to comparison`);
         } else {
             console.error("Phone not found with ID:", phoneId); 
             return;
         }
     }
 
-    // 3. Update the UI
-    renderPhones(allPhones);          // Renders 
-    updateSelectedCount();            // Update selected count
-    updateSelectedPhonesList();       // Updates the Sidebar 
-}
-
-
-function updateSelectedPhonesList() {
-    const container = document.getElementById('selectedPhonesList');
-    
-    if (selectedPhones.length === 0) {
-        container.innerHTML = `
-            <p class="text-sm text-base-content/60 text-center py-4">
-                Select phones to start comparing
-            </p>
-        `;
-        return;
+    // Re-apply filters instead of showing all phones
+    if (typeof applyFilters === 'function') {
+        applyFilters(); //apply filters to upate
+    } else {
+        
+        renderPhones(allPhones);
     }
     
-    container.innerHTML = selectedPhones.map((phone, index) => `
-        <div class="flex items-center justify-between p-2 bg-base-200 rounded-lg">
-            <div class="flex items-center gap-2">
-                <div class="w-3 h-3 rounded-full" 
-                     style="background-color: ${getPhoneColor(index)}"></div>
-                <span class="text-sm font-medium">${phone.brand} ${phone.model}</span>
-            </div>
-            <button class="btn btn-ghost btn-xs" onclick="toggleCompare('${phone.id}')">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    `).join('');
+    updateSelectedCount();
+    updateSelectedPhonesList();
 }
-
 
 function updateSelectedCount() { 
-    document.getElementById('selectedCount').textContent = selectedPhones.length; 
-}
+    async function initApp() {
+    const data = await loadPhones(); //load phones from api
+    renderPhones(data); //render phones to UI
+}document.getElementById('selectedCount').textContent = selectedPhones.length; }
 
 function updateSelectedPhonesList() {
     const container = document.getElementById('selectedPhonesList');
