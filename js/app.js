@@ -108,7 +108,7 @@ function toggleCompare(phoneId) {
     } else {
         // Add new phone
         
-        // Check if we already have 5 phones
+        // Check if we already have 5 phones    
         if (selectedPhones.length >= 5) {
             alert("Maximum 5 phones can be compared");
             return;
