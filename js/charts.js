@@ -127,7 +127,7 @@ function getBarConfig(phones) {
         label = 'Camera (MP)';
     } else if (currentMetric === 'price') {
         values = phones.map(p => p.price);
-        label = 'Price ($)';
+        label = 'Price (£)';
     }
 
     return {
