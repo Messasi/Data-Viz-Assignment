@@ -1,25 +1,26 @@
 
-console.log("filters.js loaded");
+console.log("filters.js loaded"); //Testing the file for testing 
 
 //global variables
-let currentFilters = {
-    brand: "",
+let currentFilters = { //Creating an object for the different values 
+    brand: "", //empty strings
     search: "",
-    maxPrice: null,
+    maxPrice: null, //empty values
     minRam: null,
 };
 
 
 function initFilters() {
-    console.log("Initializing filters...");
+    console.log("Loading filters"); //Loading function
 
     //Search Input
     const searchInput = document.getElementById('searchInput');
     
-    //Search Button 
+    //Different event listeners for the filters
+    //Search Button  
     const searchButton = document.getElementById('searchButton'); 
     if (searchButton) {
-    searchButton.addEventListener('click', handleSearchClick);
+    searchButton.addEventListener('click', handleSearchClick); 
     }
 
     //Brand Filter
@@ -46,7 +47,7 @@ function initFilters() {
         clearButton.addEventListener('click', clearAllFilters);
     }
 
-    console.log("Filters initialized successfully!");
+    console.log("Event listeners for filters"); //Testing logs
 }
 
 
@@ -63,8 +64,8 @@ function handleSearchClick() {
 
 //Applying fitlers
 function applyFilters() {
-    console.log("Applying filters...", currentFilters);
-    
+    console.log("Applying filters", currentFilters);
+
     
 
     // Get current filter values from inputs
@@ -73,21 +74,18 @@ function applyFilters() {
     const ramFilter = document.getElementById('ramFilter');
     
     // Update currentFilters  with latest values
-    currentFilters.brand = brandFilter ? brandFilter.value : "";
+    currentFilters.brand = brandFilter ? brandFilter.value : ""; //using ternary operator for if else short cut to say if brand there enter value if not false
     currentFilters.maxPrice = priceFilter && priceFilter.value ? parseInt(priceFilter.value) : null;
     currentFilters.minRam = ramFilter && ramFilter.value ? parseInt(ramFilter.value) : null;
 
     const filtered = allPhones.filter(phone => {
         // Search Check
-        if (currentFilters.search) {
+        if (currentFilters.search) { // If there is a search 
             const searchTerm = currentFilters.search;
             const brand = (phone.brand || "").toLowerCase();
             const model = (phone.model || "").toLowerCase();
             const processor = (phone.processor || "").toLowerCase();
-
-            const matchesSearch = brand.includes(searchTerm) || 
-                                  model.includes(searchTerm) || 
-                                  processor.includes(searchTerm);
+            const matchesSearch = brand.includes(searchTerm) ||  model.includes(searchTerm) || processor.includes(searchTerm); // Check if any field matches the search term
             
             if (!matchesSearch) {
                 console.log(`Phone filtered out by search: ${phone.brand} ${phone.model}`);
@@ -111,7 +109,7 @@ function applyFilters() {
             }
         }
 
-        //RAM Check
+        //ram Check
         if (currentFilters.minRam) {
             if (parseInt(phone.ram_gb) < currentFilters.minRam) {
                 console.log(`Phone filtered out by RAM: ${phone.ram_gb} < ${currentFilters.minRam}`);
@@ -131,12 +129,12 @@ function applyFilters() {
         console.error("renderPhones function not found!");
     }
     
-    // Update the "Showing X of Y phones" text
+    
     const resultCountEl = document.getElementById('resultCount');
     if (resultCountEl) resultCountEl.textContent = filtered.length;
 }
 
-// --- Clear Filters ---
+
 
 function clearAllFilters() {
     console.log("Clearing all filters...");

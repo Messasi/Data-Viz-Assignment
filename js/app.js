@@ -13,7 +13,8 @@ async function initApp() {
     await loadPhones(); //load phones from api
     renderPhones(allPhones); //render phones to UI
     initFilters();
-    console.log("App initialized");
+    initialiseChart();
+    console.log("App initialised");
     
 }
 
@@ -106,7 +107,7 @@ function toggleCompare(phoneId) {
         selectedPhones.splice(index, 1);
         console.log(`Removed phone ${phoneId} from comparison`);
     } else {
-        // Add new phone
+
         
         // Check if we already have 5 phones    
         if (selectedPhones.length >= 5) {
@@ -136,6 +137,7 @@ function toggleCompare(phoneId) {
     
     updateSelectedCount();
     updateSelectedPhonesList();
+    updateChart();
 }
 
 function updateSelectedCount() { 
