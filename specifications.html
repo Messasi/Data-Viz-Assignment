@@ -32,7 +32,7 @@
     <!-- Navigation -->
     <nav class="navbar bg-base-100 shadow-lg px-4 lg:px-8 sticky top-0 z-50">
 
-    <!-- LEFT -->
+    
     <div class="navbar-start">
         <!-- Mobile hamburger -->
         <div class="dropdown lg:hidden">
@@ -96,39 +96,43 @@
         <div class="container mx-auto px-4 py-8">
             <!-- Controls -->
             <div class="card bg-base-100 shadow-xl mb-6 transition-colors duration-300">
-                <div class="card-body">
-                    <div class="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-                        <!-- Search -->
-                        <div class="form-control w-full md:w-auto flex-1">
-                            <div class="input-group">
-                                <input type="text" id="tableSearch" placeholder="Search specifications..." class="input input-bordered w-full" />
-                                <button class="btn btn-square btn-primary">
-                                    <i class="fas fa-search"></i>
-                                </button>
+                <div class="card-body gap-6">
+                    
+                    <div class="form-control w-full">
+                        <label class="label">
+                            <span class="label-text font-semibold">Search for a device</span>
+                        </label>
+                        <div class="join w-full">
+                            <input type="text" id="tableSearch" placeholder="Search by brand, model, processor..." class="input input-bordered join-item w-full focus:border-purple-500" />
+                            <button class="btn btn-primary join-item px-6">
+                                <i class="fas fa-search mr-2"></i>
+                                Search
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="divider my-0"></div>
+
+                    <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <div class="stats shadow bg-base-200 w-full sm:w-auto">
+                            <div class="stat py-2 px-6">
+                                <div class="stat-title text-xs">Viewing Results</div>
+                                <div class="stat-value text-xl text-purple-600">
+                                    <span id="tableResultCount">0</span> / <span id="tableTotalCount">20</span>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Export Button -->
-                        <button id="exportCSV" class="btn btn-primary gap-2 w-full md:w-auto">
-                            <i class="fas fa-download"></i>
-                            Export CSV
+                        <button id="exportCSV" class="btn btn-outline btn-secondary gap-2 w-full sm:w-auto">
+                            <i class="fas fa-file-csv text-lg"></i>
+                            Export Specifications
                         </button>
                     </div>
 
-                    <!-- Results Info -->
-                    <div class="mt-4">
-                        <div class="stats shadow w-full">
-                            <div class="stat">
-                                <div class="stat-title">Showing</div>
-                                <div class="stat-value text-2xl text-purple-600">
-                                    <span id="tableResultCount">0</span>/<span id="tableTotalCount">20</span>
-                                </div>
-                                <div class="stat-desc">smartphones</div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
+
+                  
 
             <!-- Table Card -->
             <div class="card bg-base-100 shadow-xl transition-colors duration-300">

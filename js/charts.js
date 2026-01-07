@@ -72,6 +72,7 @@ function updateChartDescription(type) {
 }
 
 // Radar configuration and properties
+// Radar configuration and properties
 function getRadarConfig(phones) {
     // Find the max values to keep the chart fair (Normalisation)
     let maxRam = Math.max(...phones.map(p => p.ram_gb)) || 1;
@@ -81,22 +82,25 @@ function getRadarConfig(phones) {
     let maxCamera = Math.max(...phones.map(p => p.camera_mp)) || 1;
     let maxPrice = Math.max(...phones.map(p => p.price)) || 1;
 
+    // Detect dark mode for contrast
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const textColor = isDark ? '#FFFFFF' : '#666666';
+    const gridColor = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
+
     return {
         type: 'radar',
         data: {
             labels: ['RAM', 'Storage', 'Battery', 'Display', 'Camera', 'Value'],
             datasets: phones.map((phone, index) => ({
                 label: phone.brand + ' ' + phone.model,
-                // These are the percentages for the radar shape
                 data: [
                     (phone.ram_gb / maxRam) * 100,
                     (phone.storage_gb / maxStorage) * 100,
                     (phone.battery_mah / maxBattery) * 100,
                     (phone.display_inches / maxDisplay) * 100,
                     (phone.camera_mp / maxCamera) * 100,
-                    100 - (phone.price / maxPrice) * 100 // price is opposite 
+                    100 - (phone.price / maxPrice) * 100 
                 ],
-                //Store the actual units so the tooltip can read them
                 realWorldValues: [
                     phone.ram_gb + 'GB',
                     phone.storage_gb + 'GB',
@@ -106,21 +110,22 @@ function getRadarConfig(phones) {
                     '£' + phone.price
                 ],
                 borderColor: getPhoneColor(index),
-                backgroundColor: getPhoneColor(index).replace('rgb', 'rgba').replace(')', ', 0.2)'), // make it transparent
+                backgroundColor: getPhoneColor(index).replace('rgb', 'rgba').replace(')', ', 0.2)'),
                 pointBackgroundColor: getPhoneColor(index)
             }))
         },
         options: {
-            responsive: true, // changing to fit container
+            responsive: true,
             maintainAspectRatio: false,
             plugins: {
+                legend: {
+                    labels: { color: textColor } // Legend text color
+                },
                 tooltip: {
                     callbacks: {
-                        //This function changes what the user sees when they hover over a point
                         label: function(context) {
                             let label = context.dataset.label || '';
                             let score = Math.round(context.raw);
-                            // Get value fromcustom array
                             let actualValue = context.dataset.realWorldValues[context.dataIndex];
                             return label + ': ' + score + '% (Actual: ' + actualValue + ')';
                         }
@@ -131,7 +136,13 @@ function getRadarConfig(phones) {
                 r: {
                     beginAtZero: true,
                     max: 100,
-                    ticks: { display: false }
+                    ticks: { display: false },
+                    grid: { color: gridColor }, // Web lines color
+                    angleLines: { color: gridColor }, // Diagonal lines color
+                    pointLabels: {
+                        color: textColor, // RAM, Storage, etc. text color
+                        font: { family: 'Poppins', size: 12 }
+                    }
                 }
             }
         }
@@ -143,7 +154,6 @@ function getBarConfig(phones) {
     let values = []; 
     let label = '';
 
-    // If statements for the different metrics and extract the data from the phones using the .map function
     if (currentMetric === 'ram') {
         values = phones.map(p => p.ram_gb);
         label = 'RAM (GB)';
@@ -164,6 +174,9 @@ function getBarConfig(phones) {
         label = 'Price (£)';
     }
 
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const textColor = isDark ? '#FFFFFF' : '#666666';
+
     return {
         type: 'bar',
         data: {
@@ -172,15 +185,27 @@ function getBarConfig(phones) {
                 label: label,
                 data: values,
                 backgroundColor: phones.map((p, i) => getPhoneColor(i).replace('rgb', 'rgba').replace(')', ', 0.7)')),
-                borderColor: phones.map((p, i) => getPhoneColor(i)), // solid colour for border 
+                borderColor: phones.map((p, i) => getPhoneColor(i)),
                 borderWidth: 1
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: { color: textColor }
+                }
+            },
             scales: {
-                y: { beginAtZero: true }
+                y: { 
+                    beginAtZero: true,
+                    ticks: { color: textColor },
+                    grid: { color: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)' }
+                },
+                x: {
+                    ticks: { color: textColor }
+                }
             }
         }
     };
