@@ -4,20 +4,20 @@ html, body {
     font-family: 'Poppins'; /*Setting default CSS Values Globally */
 }
 
-@import url('https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css');
+@import url('https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css'); /* Import DaisyUI CSS Framework */
 
-/* Root Variables for Custom Purple Theme */
+
 :root {
     --animation-duration: 300ms;
 }
 
 /* DaisyUI Theme Customization */
 [data-theme="light"] {
-    --primary: #9333ea;           /* Purple 600 */
-    --primary-focus: #c7a0ea;     /* Purple 700 */
+    --primary: #9333ea;          
+    --primary-focus: #c7a0ea;     
     --primary-content: #ffffff;
     
-    --secondary: #0f944d;         /* Darker middle pink for high contrast */
+    --secondary: #0f944d;         
     --secondary-focus: #b32455;   
     --secondary-content: #ffffff;
     
@@ -114,12 +114,6 @@ body {
     background: var(--primary-focus);
 }
 
-/* Firefox Scrollbar */
-* {
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary) var(--base-200);
-}
-
 /* Active Page Indicator */
 .active-page {
     background: var(--primary) !important; /* Solid colour instead of gradient */
@@ -134,7 +128,7 @@ body {
     font-weight: 600;
 }
 
-/* Gradient Text (removed gradient, solid color) */
+
 .gradient-text {
     color: var(--primary);
 }
@@ -195,7 +189,7 @@ body {
 }
 
 .table tbody tr:hover {
-    background: rgba(147, 51, 234, 0.05); /* flat highlight */
+    background: rgba(147, 51, 234, 0.05);
 }
 
 /* Sort Icons */
@@ -348,7 +342,7 @@ th[data-order="desc"] .fa-sort::before {
     }
 }
 
-/* High Contrast Mode Support */
+
 @media (prefers-contrast: high) {
     .btn,
     .input,
@@ -367,7 +361,6 @@ th[data-order="desc"] .fa-sort::before {
     }
 }
 
-/* Print Styles */
 @media print {
     .navbar,
     .footer,
@@ -387,13 +380,13 @@ th[data-order="desc"] .fa-sort::before {
     }
 }
 
-/* Accessibility: Focus Visible */
+
 *:focus-visible {
     outline: 3px solid var(--primary);
     outline-offset: 3px;
 }
 
-/* Skip to Content Link */
+
 .skip-link {
     position: absolute;
     top: -100px;
@@ -410,7 +403,7 @@ th[data-order="desc"] .fa-sort::before {
     top: 0;
 }
 
-/* Custom Checkbox/Radio Styling */
+/* Custom Checkbox Radio Styling */
 .checkbox:checked,
 .radio:checked {
     background-color: var(--primary);

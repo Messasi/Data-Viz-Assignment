@@ -1,48 +1,39 @@
-//Globla variables
-let comparisonChart = null; //object to hold chart instance
-let currentMetric = 'overview';//default metric
+// charts.js
+// This file handles the Radar and Bar charts for phone comparisons.
 
-
+let comparisonChart = null; 
+let currentMetric = 'overview';
 
 function initialiseChart() {
-    console.log('Initialising chart system'); //check if function runs 
-    updateChart(); //display empty chart 
-    
+    console.log('Initialising chart system');
+    updateChart(); 
     
     const metricSelect = document.getElementById('metricSelect');
     if (metricSelect) {
-        metricSelect.addEventListener('change', handleMetricChange);//when the metric is changed instantly update chart
+        metricSelect.addEventListener('change', handleMetricChange);
     }
 }
 
-
-
 function handleMetricChange(event) {
-    currentMetric = event.target.value;//update current metric
+    currentMetric = event.target.value;
     updateChart();
 }
 
-
-
 function updateChart() {
-    //Get Canvas
     const canvas = document.getElementById('comparisonChart');
     if (!canvas) return;
-    const ctx = canvas.getContext('2d'); //get 2d  for chartjs
+    const ctx = canvas.getContext('2d');
 
-    //Check for data
-    //If selectedPhones is not defined or empty create an empty chart to avoid errors
     const phones = (typeof selectedPhones !== 'undefined') ? selectedPhones : [];
-
-    // if statement to see chart type
     const targetType = (currentMetric === 'overview') ? 'radar' : 'bar';
 
-    //remove previous chart type if it is there
+    // Update the explanation text on the page
+    updateExplanationText(targetType);
+
     if (comparisonChart) {
         comparisonChart.destroy();
     }
 
-    //Generate Configuration
     let config;
     if (targetType === 'radar') {
         config = getRadarConfig(phones);
@@ -50,66 +41,97 @@ function updateChart() {
         config = getBarConfig(phones);
     }
 
-    //Create New Chart
     comparisonChart = new Chart(ctx, config);
-    console.log("Chart updated and new chart created");
 }
 
+// NEW FUNCTION: Explains the chart to the user
+function updateExplanationText(type) {
+    const infoBox = document.getElementById('chartInfoText');
+    if (!infoBox) return;
 
+    if (type === 'radar') {
+        infoBox.innerHTML = `
+            <strong>How to read this chart:</strong> We use <strong>Normalisation</strong> to compare different units (like £ vs mAh). 
+            Each value is converted to a score out of 100 based on the best phone in the list. 
+            A larger shape means a better all-round device.
+        `;
+    } else {
+        infoBox.innerHTML = `
+            <strong>How to read this chart:</strong> This bar chart shows the <strong>Actual Values</strong> for ${currentMetric}. 
+            This allows you to see the exact technical differences between your selected phones.
+        `;
+    }
+}
 
-//Radar configuration and properties
 function getRadarConfig(phones) {
-
-    
-    //Find the max values t keep the chart fair 
-    let maxRam = Math.max(...phones.map(p => p.ram_gb)) || 100;
-    let maxStorage = Math.max(...phones.map(p => p.storage_gb)) || 100;
-    let maxBattery = Math.max(...phones.map(p => p.battery_mah)) || 100;
-    let maxDisplay = Math.max(...phones.map(p => p.display_inches)) || 100;
-    let maxCamera = Math.max(...phones.map(p => p.camera_mp)) || 100;
-    let maxPrice = Math.max(...phones.map(p => p.price)) || 100;
+    // Find max values to keep the comparison fair (Normalisation)
+    let maxRam = Math.max(...phones.map(p => p.ram_gb)) || 1;
+    let maxStorage = Math.max(...phones.map(p => p.storage_gb)) || 1;
+    let maxBattery = Math.max(...phones.map(p => p.battery_mah)) || 1;
+    let maxDisplay = Math.max(...phones.map(p => p.display_inches)) || 1;
+    let maxCamera = Math.max(...phones.map(p => p.camera_mp)) || 1;
+    let maxPrice = Math.max(...phones.map(p => p.price)) || 1;
 
     return {
         type: 'radar',
         data: {
-            labels: ['RAM', 'Storage', 'Battery', 'Display', 'Camera', 'Value'],
+            labels: ['RAM', 'Storage', 'Battery', 'Display', 'Camera', 'Value (Price)'],
             datasets: phones.map((phone, index) => ({
                 label: phone.brand + ' ' + phone.model,
+                // These are the "Normalised" scores (out of 100)
                 data: [
-                    (phone.ram_gb / maxRam) * 100, //make it to a percentage
+                    (phone.ram_gb / maxRam) * 100,
                     (phone.storage_gb / maxStorage) * 100,
                     (phone.battery_mah / maxBattery) * 100,
                     (phone.display_inches / maxDisplay) * 100,
                     (phone.camera_mp / maxCamera) * 100,
-                    
-                    100 - (phone.price / maxPrice) * 100 //price is opposite 
+                    100 - (phone.price / maxPrice) * 100 // Lower price = higher value score
+                ],
+                // Store original values here so we can show them in the tooltip later
+                originalValues: [
+                    phone.ram_gb + 'GB',
+                    phone.storage_gb + 'GB',
+                    phone.battery_mah + 'mAh',
+                    phone.display_inches + '"',
+                    phone.camera_mp + 'MP',
+                    '£' + phone.price
                 ],
                 borderColor: getPhoneColor(index),
-                backgroundColor: getPhoneColor(index).replace('rgb', 'rgba').replace(')', ', 0.2)'),//make it transparent
+                backgroundColor: getPhoneColor(index).replace('rgb', 'rgba').replace(')', ', 0.2)'),
                 pointBackgroundColor: getPhoneColor(index)
             }))
         },
         options: {
-            responsive: true, //chaing to fit container
+            responsive: true,
             maintainAspectRatio: false,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        // This makes the hover-box show: "Score: 80% (Actual: 8GB)"
+                        label: function(context) {
+                            const score = Math.round(context.raw);
+                            const actual = context.dataset.originalValues[context.dataIndex];
+                            return context.dataset.label + ': ' + score + '% (Actual: ' + actual + ')';
+                        }
+                    }
+                }
+            },
             scales: {
                 r: {
                     beginAtZero: true,
                     max: 100,
-                    ticks: { display: false } // Hide numbers on the web for cleaner look
+                    ticks: { display: false }
                 }
             }
         }
     };
 }
 
-//Bar chart cofiguration
+// Bar chart configuration remains mostly the same
 function getBarConfig(phones) {
-    let values = []; //lable array
+    let values = []; 
     let label = '';
 
-  
-    //If statements for the different metrics and extract the data from the phones using the .map function
     if (currentMetric === 'ram') {
         values = phones.map(p => p.ram_gb);
         label = 'RAM (GB)';
@@ -138,7 +160,7 @@ function getBarConfig(phones) {
                 label: label,
                 data: values,
                 backgroundColor: phones.map((p, i) => getPhoneColor(i).replace('rgb', 'rgba').replace(')', ', 0.7)')),
-                borderColor: phones.map((p, i) => getPhoneColor(i)), //solid color for border using the phone colour function 
+                borderColor: phones.map((p, i) => getPhoneColor(i)), 
                 borderWidth: 1
             }]
         },
@@ -152,14 +174,13 @@ function getBarConfig(phones) {
     };
 }
 
-//Getting th ephone colour
 function getPhoneColor(index) {
-    const colors = [ //Keeping the colours consistent for each phone for both charts
+    const colors = [
         'rgb(99, 102, 241)',  
         'rgb(239, 68, 68)',  
         'rgb(16, 185, 129)',  
         'rgb(245, 158, 11)',  
         'rgb(139, 92, 246)'  
     ];
-    return colors[index]; //outputting the colour 
+    return colors[index % colors.length];
 }

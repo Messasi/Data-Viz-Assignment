@@ -174,7 +174,7 @@ function updateSelectedPhonesList() {
 
 function getPhoneColor(index) {
     const colors = ['#6366F1', '#EF4444', '#10B981', '#F59E0B', '#8B5CF6'];
-    return colors[index % colors.length];
+    return colors[index];
 }
     
     //call initEventListeners
