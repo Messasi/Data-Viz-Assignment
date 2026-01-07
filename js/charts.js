@@ -1,39 +1,44 @@
-// charts.js
-// This file handles the Radar and Bar charts for phone comparisons.
-
-let comparisonChart = null; 
-let currentMetric = 'overview';
+// Global variables
+let comparisonChart = null; // object to hold chart instance
+let currentMetric = 'overview'; // default metric
 
 function initialiseChart() {
-    console.log('Initialising chart system');
-    updateChart(); 
+    console.log('Initialising chart system'); // check if function runs 
+    updateChart(); // display empty chart 
     
     const metricSelect = document.getElementById('metricSelect');
     if (metricSelect) {
-        metricSelect.addEventListener('change', handleMetricChange);
+        metricSelect.addEventListener('change', handleMetricChange); // when the metric is changed instantly update chart
     }
 }
 
 function handleMetricChange(event) {
-    currentMetric = event.target.value;
+    currentMetric = event.target.value; // update current metric
     updateChart();
 }
 
 function updateChart() {
+    // Get Canvas
     const canvas = document.getElementById('comparisonChart');
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d'); // get 2d context for chartjs
 
+    // Check for data
+    // If selectedPhones is not defined or empty create an empty chart to avoid errors
     const phones = (typeof selectedPhones !== 'undefined') ? selectedPhones : [];
+
+    // if statement to see chart type
     const targetType = (currentMetric === 'overview') ? 'radar' : 'bar';
 
-    // Update the explanation text on the page
-    updateExplanationText(targetType);
+    // NEW: Update the text description above the chart
+    updateChartDescription(targetType);
 
+    // remove previous chart type if it is there
     if (comparisonChart) {
         comparisonChart.destroy();
     }
 
+    // Generate Configuration
     let config;
     if (targetType === 'radar') {
         config = getRadarConfig(phones);
@@ -41,30 +46,34 @@ function updateChart() {
         config = getBarConfig(phones);
     }
 
+    // Create New Chart
     comparisonChart = new Chart(ctx, config);
+    console.log("Chart updated and new chart created");
 }
 
-// NEW FUNCTION: Explains the chart to the user
-function updateExplanationText(type) {
-    const infoBox = document.getElementById('chartInfoText');
-    if (!infoBox) return;
+
+function updateChartDescription(type) {
+    const descriptionElement = document.getElementById('chartDescription');
+    if (!descriptionElement) return;
 
     if (type === 'radar') {
-        infoBox.innerHTML = `
-            <strong>How to read this chart:</strong> We use <strong>Normalisation</strong> to compare different units (like £ vs mAh). 
-            Each value is converted to a score out of 100 based on the best phone in the list. 
-            A larger shape means a better all-round device.
+        descriptionElement.innerHTML = `
+            <strong>Radar View:</strong> The metrics are based on a percentage to 100% to keep the comparison fair 
+            For example, 100% RAM means that phone has the highest RAM in your selection. 
+            <em>Value</em> is inverted: a cheaper price gives a higher score.
         `;
     } else {
-        infoBox.innerHTML = `
-            <strong>How to read this chart:</strong> This bar chart shows the <strong>Actual Values</strong> for ${currentMetric}. 
-            This allows you to see the exact technical differences between your selected phones.
+        
+        descriptionElement.innerHTML = `
+            <strong>Bar View:</strong> Now showing actual values for <strong>${currentMetric.toUpperCase()}</strong>. 
+            This allows for a direct side by side comparison of the data.
         `;
     }
 }
 
+// Radar configuration and properties
 function getRadarConfig(phones) {
-    // Find max values to keep the comparison fair (Normalisation)
+    // Find the max values to keep the chart fair (Normalisation)
     let maxRam = Math.max(...phones.map(p => p.ram_gb)) || 1;
     let maxStorage = Math.max(...phones.map(p => p.storage_gb)) || 1;
     let maxBattery = Math.max(...phones.map(p => p.battery_mah)) || 1;
@@ -75,20 +84,20 @@ function getRadarConfig(phones) {
     return {
         type: 'radar',
         data: {
-            labels: ['RAM', 'Storage', 'Battery', 'Display', 'Camera', 'Value (Price)'],
+            labels: ['RAM', 'Storage', 'Battery', 'Display', 'Camera', 'Value'],
             datasets: phones.map((phone, index) => ({
                 label: phone.brand + ' ' + phone.model,
-                // These are the "Normalised" scores (out of 100)
+                // These are the percentages for the radar shape
                 data: [
                     (phone.ram_gb / maxRam) * 100,
                     (phone.storage_gb / maxStorage) * 100,
                     (phone.battery_mah / maxBattery) * 100,
                     (phone.display_inches / maxDisplay) * 100,
                     (phone.camera_mp / maxCamera) * 100,
-                    100 - (phone.price / maxPrice) * 100 // Lower price = higher value score
+                    100 - (phone.price / maxPrice) * 100 // price is opposite 
                 ],
-                // Store original values here so we can show them in the tooltip later
-                originalValues: [
+                //Store the actual units so the tooltip can read them
+                realWorldValues: [
                     phone.ram_gb + 'GB',
                     phone.storage_gb + 'GB',
                     phone.battery_mah + 'mAh',
@@ -97,21 +106,23 @@ function getRadarConfig(phones) {
                     '£' + phone.price
                 ],
                 borderColor: getPhoneColor(index),
-                backgroundColor: getPhoneColor(index).replace('rgb', 'rgba').replace(')', ', 0.2)'),
+                backgroundColor: getPhoneColor(index).replace('rgb', 'rgba').replace(')', ', 0.2)'), // make it transparent
                 pointBackgroundColor: getPhoneColor(index)
             }))
         },
         options: {
-            responsive: true,
+            responsive: true, // changing to fit container
             maintainAspectRatio: false,
             plugins: {
                 tooltip: {
                     callbacks: {
-                        // This makes the hover-box show: "Score: 80% (Actual: 8GB)"
+                        //This function changes what the user sees when they hover over a point
                         label: function(context) {
-                            const score = Math.round(context.raw);
-                            const actual = context.dataset.originalValues[context.dataIndex];
-                            return context.dataset.label + ': ' + score + '% (Actual: ' + actual + ')';
+                            let label = context.dataset.label || '';
+                            let score = Math.round(context.raw);
+                            // Get value fromcustom array
+                            let actualValue = context.dataset.realWorldValues[context.dataIndex];
+                            return label + ': ' + score + '% (Actual: ' + actualValue + ')';
                         }
                     }
                 }
@@ -127,11 +138,12 @@ function getRadarConfig(phones) {
     };
 }
 
-// Bar chart configuration remains mostly the same
+// Bar chart configuration
 function getBarConfig(phones) {
     let values = []; 
     let label = '';
 
+    // If statements for the different metrics and extract the data from the phones using the .map function
     if (currentMetric === 'ram') {
         values = phones.map(p => p.ram_gb);
         label = 'RAM (GB)';
@@ -160,7 +172,7 @@ function getBarConfig(phones) {
                 label: label,
                 data: values,
                 backgroundColor: phones.map((p, i) => getPhoneColor(i).replace('rgb', 'rgba').replace(')', ', 0.7)')),
-                borderColor: phones.map((p, i) => getPhoneColor(i)), 
+                borderColor: phones.map((p, i) => getPhoneColor(i)), // solid colour for border 
                 borderWidth: 1
             }]
         },
@@ -174,13 +186,15 @@ function getBarConfig(phones) {
     };
 }
 
+// Getting the phone colour
 function getPhoneColor(index) {
-    const colors = [
+    const colors = [ // Keeping the colours consistent for each phone for both charts
         'rgb(99, 102, 241)',  
         'rgb(239, 68, 68)',  
         'rgb(16, 185, 129)',  
         'rgb(245, 158, 11)',  
         'rgb(139, 92, 246)'  
     ];
-    return colors[index % colors.length];
+    
+    return colors[index]; 
 }
