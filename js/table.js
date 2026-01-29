@@ -1,7 +1,7 @@
 
-let tableData = [];
+let tableData = []; //Creaitng an empty array to hold our phone data
 
-//configuration for the detault sorting method 
+//sorting method
 let tableSortConfig = {
     key: 'price',
     order: 'asc'
@@ -29,7 +29,7 @@ async function initialiseTable() {
         console.log("Search bar is ready");
     }
 
-    //Setup the Clickable Headers for Sorting
+    //Setup the  Headers for Sorting
     const headers = document.querySelectorAll('th[data-sort]');
     
     //Loop through each header and add a click listener
@@ -41,12 +41,6 @@ async function initialiseTable() {
             handleSort(sortKey);
         });
     });
-
-    // 4. Setup the Export to CSV Button
-    const exportButton = document.getElementById('exportCSV');
-    if (exportButton) {
-        exportButton.addEventListener('click', exportToCSV);
-    }
 
     console.log("Table initialisation complete.");
 }
@@ -61,7 +55,7 @@ async function loadTableData() {
         if (typeof showLoading === 'function') showLoading('tableBody');
 
       
-        const response = await fetch('php/api.php');
+        const response = await fetch('php/api.php'); //fetch the data from the data api
 
         //check response 
         if (!response.ok) {
@@ -156,7 +150,7 @@ function renderMobileCards(phones) {
         return;
     }
 
-    // Create HTML for cards using the map function
+    ///Create the cards using the map func
     const cardsHtml = phones.map(function(phone) {
         return `
             <div class="card bg-base-100 shadow-lg border border-base-300 mb-4">
@@ -249,14 +243,13 @@ function handleSort(sortKey) {
     }
 
     // Perform the sort
-    // We create a copy ([...tableData]) so we don't break the original list order permanently
     const sortedList = [...tableData];
     
-    sortedList.sort(function(a, b) {
+    sortedList.sort(function(a, b) { 
         let valueA = a[sortKey];
         let valueB = b[sortKey];
 
-        // If sorting by text (like Brand), use localeCompare for proper alphabetising
+        // If sorting by strings (like Brand or Model)
         if (typeof valueA === 'string') {
             valueA = valueA.toLowerCase();
             valueB = valueB.toLowerCase();
@@ -276,7 +269,7 @@ function handleSort(sortKey) {
         }
     });
 
-    // Re-draw the table with the sorted list
+    // Rerender the updated table
     renderTable(sortedList);
     renderMobileCards(sortedList);
     
@@ -285,11 +278,11 @@ function handleSort(sortKey) {
 }
 
 function updateSortVisuals(activeKey, order) {
-    // 1. Reset all headers to show the default sort icon
+    //Reset all headers to show the default sort icon
     const allHeaders = document.querySelectorAll('th[data-sort]');
     
     allHeaders.forEach(function(header) {
-        // Remove the data-order attribute
+        
         header.removeAttribute('data-order');
         
         // Find the icon inside the header and make it the default double arrow
@@ -299,7 +292,7 @@ function updateSortVisuals(activeKey, order) {
         }
     });
 
-    // 2. Set the active header's icon
+   //Set the active header's icon
     const activeHeader = document.querySelector(`th[data-sort="${activeKey}"]`);
     if (activeHeader) {
         activeHeader.setAttribute('data-order', order);
@@ -316,56 +309,7 @@ function updateSortVisuals(activeKey, order) {
 }
 
 
-// ==========================================
+
 // 7. EXPORT TO CSV
 // ==========================================
 
-function exportToCSV() {
-    console.log("Generating CSV file...");
-
-    if (tableData.length === 0) {
-        alert("No data available to export!");
-        return;
-    }
-
-    // 1. Create the Header Row
-    const headers = [
-        "Brand", "Model", "Price", "RAM (GB)", "Storage (GB)", 
-        "Battery (mAh)", "Display", "Camera", "Processor", "OS", "Date"
-    ];
-    
-    // 2. Create the Data Rows
-    // We map over each phone and turn it into a comma-separated string
-    const rows = tableData.map(function(phone) {
-        return [
-            phone.brand,
-            phone.model,
-            phone.price,
-            phone.ram_gb,
-            phone.storage_gb,
-            phone.battery_mah,
-            phone.display_inches,
-            phone.camera_mp,
-            phone.processor, 
-            phone.os,
-            phone.release_date
-        ].join(",");
-    });
-
-    // 3. Combine Header and Rows with "New Line" characters (\n)
-    const csvContent = [headers.join(","), ...rows].join("\n");
-
-    // 4. Create a "Blob" (a virtual file object in memory)
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    
-    // 5. Create a fake download link and click it automatically
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'mobile_matrix_data.csv');
-    document.body.appendChild(link);
-    link.click();
-    
-    // Clean up
-    document.body.removeChild(link);
-}
