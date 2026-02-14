@@ -1,4 +1,3 @@
-
 console.log("filters.js loaded"); //Testing the file for testing 
 
 //global variables
@@ -7,6 +6,7 @@ let currentFilters = { //Creating an object for the different values
     search: "",
     maxPrice: null, //empty values
     minRam: null,
+    storage: [], // New array for storage selection
 };
 
 
@@ -15,12 +15,19 @@ function initFilters() {
 
     //Search Input
     const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        // Adding input event so it searches as you type
+        searchInput.addEventListener('input', (e) => {
+            currentFilters.search = e.target.value.toLowerCase().trim();
+            applyFilters();
+        });
+    }
     
     //Different event listeners for the filters
     //Search Button  
     const searchButton = document.getElementById('searchButton'); 
     if (searchButton) {
-    searchButton.addEventListener('click', handleSearchClick); 
+        searchButton.addEventListener('click', handleSearchClick); 
     }
 
     //Brand Filter
@@ -29,17 +36,23 @@ function initFilters() {
         brandFilter.addEventListener('change', applyFilters); // 
     }
 
-    //Price Filter
-    const priceFilter = document.getElementById('priceFilter');
-    if (priceFilter) {
-        priceFilter.addEventListener('change', applyFilters); // 
+    //Price Filter (Slider)
+    const priceSlider = document.getElementById('priceSlider');
+    if (priceSlider) {
+        priceSlider.addEventListener('input', applyFilters); // Updates as slider moves
     }
 
-    //RAM Filter
-    const ramFilter = document.getElementById('ramFilter');
-    if (ramFilter) {
-        ramFilter.addEventListener('change', applyFilters); // 
-    }
+    //RAM Filter (Radio Buttons)
+    const ramInputs = document.querySelectorAll('input[name="ram"]');
+    ramInputs.forEach(input => {
+        input.addEventListener('change', applyFilters); // 
+    });
+
+    //Storage Filter (Checkboxes)
+    const storageCheckboxes = document.querySelectorAll('input[name="storage"]');
+    storageCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', applyFilters); // New listener for storage
+    });
 
     //Clear Button
     const clearButton = document.getElementById('clearFilters');
@@ -66,17 +79,19 @@ function handleSearchClick() {
 function applyFilters() {
     console.log("Applying filters", currentFilters);
 
-    
-
     // Get current filter values from inputs
     const brandFilter = document.getElementById('brandFilter');
-    const priceFilter = document.getElementById('priceFilter');
-    const ramFilter = document.getElementById('ramFilter');
+    const priceSlider = document.getElementById('priceSlider');
+    const ramFilter = document.querySelector('input[name="ram"]:checked');
+    const storageCheckboxes = document.querySelectorAll('input[name="storage"]:checked');
     
     // Update currentFilters  with latest values
     currentFilters.brand = brandFilter ? brandFilter.value : ""; //using ternary operator for if else short cut to say if brand there enter value if not false
-    currentFilters.maxPrice = priceFilter && priceFilter.value ? parseInt(priceFilter.value) : null;
-    currentFilters.minRam = ramFilter && ramFilter.value ? parseInt(ramFilter.value) : null;
+    currentFilters.maxPrice = priceSlider ? parseInt(priceSlider.value) : null;
+    currentFilters.minRam = (ramFilter && ramFilter.value) ? parseInt(ramFilter.value) : null;
+    
+    // Update storage array from checked boxes
+    currentFilters.storage = Array.from(storageCheckboxes).map(cb => parseInt(cb.value));
 
     const filtered = allPhones.filter(phone => {
         // Search Check
@@ -88,7 +103,6 @@ function applyFilters() {
             const matchesSearch = brand.includes(searchTerm) ||  model.includes(searchTerm) || processor.includes(searchTerm); // Check if any field matches the search term
             
             if (!matchesSearch) {
-                console.log(`Phone filtered out by search: ${phone.brand} ${phone.model}`);
                 return false;
             }
         }
@@ -96,7 +110,6 @@ function applyFilters() {
         //Brand Check
         if (currentFilters.brand) {
             if (phone.brand !== currentFilters.brand) {
-                console.log(`Phone filtered out by brand: ${phone.brand} !== ${currentFilters.brand}`);
                 return false;
             }
         }
@@ -104,7 +117,6 @@ function applyFilters() {
         //Price Check
         if (currentFilters.maxPrice) {
             if (parseFloat(phone.price) > currentFilters.maxPrice) {
-                console.log(`Phone filtered out by price: ${phone.price} > ${currentFilters.maxPrice}`);
                 return false;
             }
         }
@@ -112,13 +124,26 @@ function applyFilters() {
         //ram Check
         if (currentFilters.minRam) {
             if (parseInt(phone.ram_gb) < currentFilters.minRam) {
-                console.log(`Phone filtered out by RAM: ${phone.ram_gb} < ${currentFilters.minRam}`);
+                return false;
+            }
+        }
+
+        //Storage Check
+        if (currentFilters.storage.length > 0) {
+            if (!currentFilters.storage.includes(parseInt(phone.storage_gb))) {
                 return false;
             }
         }
 
         return true;
     });
+
+    // Sync selection: remove phones from comparison if they are filtered out
+    if (typeof selectedPhones !== 'undefined') {
+        selectedPhones = selectedPhones.filter(selected => 
+            filtered.some(f => f.id === selected.id)
+        );
+    }
 
     console.log(`Filtered ${filtered.length} phones from ${allPhones.length} total`);
 
@@ -129,6 +154,10 @@ function applyFilters() {
         console.error("renderPhones function not found!");
     }
     
+    // Update the chart and counts to match the new filtered state
+    if (typeof updateChart === 'function') updateChart();
+    if (typeof updateSelectedCount === 'function') updateSelectedCount();
+    if (typeof updateSelectedPhonesList === 'function') updateSelectedPhonesList();
     
     const resultCountEl = document.getElementById('resultCount');
     if (resultCountEl) resultCountEl.textContent = filtered.length;
@@ -145,18 +174,24 @@ function clearAllFilters() {
         search: "",
         maxPrice: null,
         minRam: null,
+        storage: [],
     };
 
     // Reset UI Inputs
     const searchInput = document.getElementById('searchInput');
     const brandFilter = document.getElementById('brandFilter');
-    const priceFilter = document.getElementById('priceFilter');
-    const ramFilter = document.getElementById('ramFilter');
+    const priceSlider = document.getElementById('priceSlider');
+    const ramAny = document.getElementById('ramAny');
+    const storageCheckboxes = document.querySelectorAll('input[name="storage"]');
 
     if (searchInput) searchInput.value = ""; // Clear all inputs
     if (brandFilter) brandFilter.value = "";
-    if (priceFilter) priceFilter.value = "";
-    if (ramFilter) ramFilter.value = "";    
+    if (priceSlider) {
+        priceSlider.value = 2000;
+        document.getElementById('priceDisplay').innerText = '£2000';
+    }
+    if (ramAny) ramAny.checked = true;
+    storageCheckboxes.forEach(cb => cb.checked = false);
     
     // Show all phones again
     if (typeof allPhones !== 'undefined' && allPhones) {
