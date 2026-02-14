@@ -83,77 +83,89 @@
 
         <div class="container mx-auto px-4 py-8">
             <!-- Filters Section -->
-            <div class="card bg-base-100 shadow-xl mb-6 transition-colors duration-300">
-                <div class="card-body">
-                    <h2 class="card-title text-purple-600">
-                        <i class="fas fa-filter mr-2"></i>Filters
-                    </h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <!-- Search -->
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text font-medium">Search</span>
-                            </label>
-                            <div class="input-group">
-                                <input type="text" id="searchInput" placeholder="Brand, model..." class="input input-bordered w-full" />
-                                <button id="searchButton"class="btn btn-square btn-primary">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
+           <div class="card bg-base-100 shadow-xl mb-6 border border-base-200 overflow-hidden transition-colors duration-300">
+    <div class="bg-base-200/30 px-6 py-4 flex justify-between items-center border-b border-base-200">
+        <h2 class="font-bold text-3xl tracking-tight text-base-content">
+            Filters
+        </h2>
+        <button id="clearFilters" class="btn btn-ghost btn-sm hover:bg-primary/10 text-primary gap-2">
+            Reset All
+        </button>
+    </div>
 
-                        <!-- Brand Filter -->
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text font-medium">Brand</span>
-                            </label>
-                            <select id="brandFilter" class="select select-bordered w-full">
-                                <option value="">All Brands</option>
-                                <option value="Apple">Apple</option>
-                                <option value="Samsung">Samsung</option>
-                                <option value="Google">Google</option>
-                                <option value="OnePlus">OnePlus</option>
-                                <option value="Xiaomi">Xiaomi</option>
-                            </select>
-                        </div>
+    <div class="card-body p-6 md:p-8">
+        <div class="mb-6">
+            <label class="label pt-0">
+                <span class="label-text font-bold text-base-content/70">What are you looking for?</span>
+            </label>
+            <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-base-content/40">
+                    <i class="fas fa-search"></i>
+                </span>
+                <input type="text" id="searchInput" placeholder="Search by model, brand or specifications..." 
+                       class="input input-bordered w-full pl-11 h-12 bg-base-200/30 focus:bg-base-100 transition-all border-base-300 focus:border-primary" />
+            </div>
+        </div>
 
-                        <!-- Price Range -->
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text font-medium">Max Price</span>
-                            </label>
-                            <select id="priceFilter" class="select select-bordered w-full">
-                                <option value="">Any Price</option>
-                                <option value="500">Under $500</option>
-                                <option value="800">Under $800</option>
-                                <option value="1000">Under $1000</option>
-                                <option value="2000">Under $2000</option>
-                            </select>
-                        </div>
-
-                        <!-- RAM Filter -->
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text font-medium">Minimum RAM</span>
-                            </label>
-                            <select id="ramFilter" class="select select-bordered w-full">
-                                <option value="">Any RAM</option>
-                                <option value="4">4GB+</option>
-                                <option value="6">6GB+</option>
-                                <option value="8">8GB+</option>
-                                <option value="12">12GB+</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="card-actions justify-end mt-4">
-                        <button id="clearFilters" class="btn btn-ghost btn-sm">
-                            <i class="fas fa-times mr-2"></i>Clear Filters
-                        </button>
-                    </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pt-6 border-t border-base-200">
+            
+            <div class="form-control">
+                <div class="flex justify-between items-end mb-4">
+                    <span class="text-xs font-bold uppercase tracking-wider opacity-60">Budget Cap</span>
+                    <span class="text-lg font-mono font-bold font-bold" id="priceDisplay">£2000</span>
+                </div>
+                <input type="range" id="priceSlider" min="0" max="2000" value="2000" class="range range-primary range-xs" step="50" 
+                       oninput="document.getElementById('priceDisplay').innerText = '£' + this.value" />
+                <div class="flex justify-between w-full px-1 mt-2">
+                    <span class="text-[10px] font-bold opacity-40">£0</span>
+                    <span class="text-[10px] font-bold opacity-40">£2000</span>
                 </div>
             </div>
+
+            <div class="form-control">
+                <label class="label-text font-bold text-xs uppercase opacity-60 mb-2">Manufacturer</label>
+                <select id="brandFilter" class="select select-bordered select-md bg-base-200/30 border-base-300 focus:border-primary">
+                    <option value="">All Brands</option>
+                    <option value="Apple">Apple</option>
+                    <option value="Samsung">Samsung</option>
+                    <option value="Google">Google</option>
+                    <option value="OnePlus">OnePlus</option>
+                    <option value="Xiaomi">Xiaomi</option>
+                </select>
+            </div>
+
+            <div class="form-control">
+                <label class="label-text font-bold text-xs uppercase opacity-60 mb-2">Memory (RAM)</label>
+                <div class="join w-full">
+                    <input class="join-item btn btn-md flex-1 bg-base-200/30 border-base-300 hover:border-primary checked:bg-primary checked:text-white" type="radio" name="ram" id="ramAny" aria-label="Any" value="" checked />
+                    <input class="join-item btn btn-md flex-1 bg-base-200/30 border-base-300 hover:border-primary checked:bg-primary checked:text-white" type="radio" name="ram" id="ram8" aria-label="8GB+" value="8" />
+                    <input class="join-item btn btn-md flex-1 bg-base-200/30 border-base-300 hover:border-primary checked:bg-primary checked:text-white" type="radio" name="ram" id="ram12" aria-label="12GB+" value="12" />
+                </div>
+            </div>
+
+            <div class="form-control">
+                            <span class="text-sm font-bold uppercase opacity-50 mb-2">Storage</span>
+                            <div class="flex items-center gap-7 bg-base-200/30 p-4 px-3 rounded-xl border border-base-300">
+                                <label class="flex items-center gap-2 cursor-pointer group">
+                                    <input type="checkbox" name="storage" value="128" class="custom-checkbox" />
+                                    <span class="text-xs font-bold opacity-70 group-hover:opacity-100 group-hover:text-primary transition-all">128GB</span>
+                                </label>
+                                <div class="w-[1px] h-4 bg-base-300"></div>
+                                <label class="flex items-center gap-2 cursor-pointer group">
+                                    <input type="checkbox" name="storage" value="256" class="custom-checkbox" />
+                                    <span class="text-xs font-bold opacity-70 group-hover:opacity-100 group-hover:text-primary transition-all">256GB</span>
+                                </label>
+                                <div class="w-[1px] h-4 bg-base-300"></div>
+                                <label class="flex items-center gap-2 cursor-pointer group">
+                                    <input type="checkbox" name="storage" value="512" class="custom-checkbox" />
+                                    <span class="text-xs font-bold opacity-70 group-hover:opacity-100 group-hover:text-primary transition-all">512GB</span>
+                                </label>
+                            </div>
+                        </div>
+            
+        </div>
+    </div>
+</div>
 
             <!-- Results Info -->
             <div class="alert shadow-lg mb-6 transition-colors duration-300">
