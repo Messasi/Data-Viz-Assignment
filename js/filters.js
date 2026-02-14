@@ -139,6 +139,7 @@ function applyFilters() {
     });
 
     // Sync selection: remove phones from comparison if they are filtered out
+    // This ensures that phones deleted by the filter are also deleted in the selection array
     if (typeof selectedPhones !== 'undefined') {
         selectedPhones = selectedPhones.filter(selected => 
             filtered.some(f => f.id === selected.id)
@@ -155,6 +156,7 @@ function applyFilters() {
     }
     
     // Update the chart and counts to match the new filtered state
+    // These functions ensure the UI reflects the deleted items immediately
     if (typeof updateChart === 'function') updateChart();
     if (typeof updateSelectedCount === 'function') updateSelectedCount();
     if (typeof updateSelectedPhonesList === 'function') updateSelectedPhonesList();
