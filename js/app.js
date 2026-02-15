@@ -141,10 +141,36 @@ function toggleCompare(phoneId) {
 }
 
 function updateSelectedCount() { 
-    async function initApp() {
-    const data = await loadPhones(); //load phones from api
-    renderPhones(data); //render phones to UI
-}document.getElementById('selectedCount').textContent = selectedPhones.length; }
+    const count = selectedPhones.length;
+
+    // 1. Update the Purple Alert Bar (You said this works)
+    const selectedCountEl = document.getElementById('selectedCount');
+    if (selectedCountEl) {
+        selectedCountEl.textContent = count;
+    }
+
+    // 2. Update the Grey Chart Badge
+    const chartCompareCountEl = document.getElementById('chartCompareCount');
+    
+    if (chartCompareCountEl) {
+        console.log("Updating grey counter to:", count); // Check your console for this!
+        chartCompareCountEl.textContent = `Comparing ${count}/5 phones`;
+        
+        // Update the styling
+        if (count === 5) {
+            chartCompareCountEl.className = "badge badge-error text-white font-semibold py-3 px-4";
+        } else if (count > 0) {
+            chartCompareCountEl.className = "badge badge-primary text-white font-semibold py-3 px-4";
+        } else {
+            chartCompareCountEl.className = "badge badge-ghost font-semibold py-3 px-4 opacity-50";
+        }
+    } else {
+        console.warn("Could not find the element with ID: chartCompareCount");
+    }
+}
+
+
+
 
 function updateSelectedPhonesList() {
     const container = document.getElementById('selectedPhonesList');
