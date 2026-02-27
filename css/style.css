@@ -1,476 +1,86 @@
-html, body {
-    max-width: 100%;
-    overflow-x: hidden;
-    font-family: 'Poppins'; /*Setting default CSS Values Globally */
-}
-
-@import url('https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css'); /* Import DaisyUI CSS Framework */
-
-
+/* Custom CSS Variables */
 :root {
-    --animation-duration: 300ms;
+    --primary-purple: #9333ea;
+    --secondary-blue: #3b82f6;
+    --bg-light: #f8fafc;
+    --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
-/* DaisyUI Theme Customization */
-[data-theme="light"] {
-    --primary: #9333ea;          
-    --primary-focus: #c7a0ea;     
-    --primary-content: #ffffff;
-    
-    --secondary: #ed64a6;         
-    --secondary-focus: #b32455;   
-    --secondary-content: #ffffff;
-    
-    --accent: #3b82f6;            
-    --accent-focus: #2563eb;      
-    --accent-content: #ffffff;
-    
-    --neutral: #6b7280;           
-    --neutral-focus: #4b5563;     
-    --neutral-content: #ffffff;
-    
-    --base-100: #ffffff;
-    --base-200: #f3f4f6;          
-    --base-300: #e5e7eb;          
-    --base-content: #1f2937;     
-    --info: #3b82f6;              
-    --success: #10b981;           
-    --warning: #f59e0b;           
-    --error: #ef4444;             
-}
-
-[data-theme="dark"] {
-    --primary: #a855f7;           
-    --primary-focus: #9333ea;     
-    --primary-content: #ffffff;
-    
-    --secondary: #ed64a6         
-    --secondary-focus: #ec4899;   
-    --secondary-content: #ffffff;
-    
-    --accent: #60a5fa;            
-    --accent-focus: #3b82f6;      
-    --accent-content: #ffffff;
-    
-    --neutral: #374151;           
-    --neutral-focus: #f3f4f6;     
-    --neutral-content: #e5e7eb;
-    
-    --base-100: #1f2937;          
-    --base-200: #111827;          
-    --base-300: #0f172a;          
-    --base-content: #f3f4f6;      
-    
-    --info: #60a5fa;              
-    --success: #34d399;           
-    --warning: #fbbf24;           
-    --error: #f87171;             
-}
-
-/* Smooth Transitions for Theme Switching */
-html,
-body,
-nav,
-main,
-footer,
-.card,
-.alert,
-.btn,
-.input,
-.select,
-.table,
-.navbar,
-.menu,
-.dropdown-content {
-    transition: background-color var(--animation-duration) ease-in-out,
-                color var(--animation-duration) ease-in-out,
-                border-color var(--animation-duration) ease-in-out;
-}
-
-/* Global Styles */
+/* Base Styles */
 body {
-    font-family: 'Poppins', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--bg-light);
+    color: #1e293b;
+    scroll-behavior: smooth;
 }
 
-/* Scrollbar Styling */
+/* Custom Scrollbar for better design */
 ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--base-200);
+    background: #f1f1f1;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--primary);
-    border-radius: 5px;
+    background: #c084fc;
+    border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--primary-focus);
+    background: var(--primary-purple);
 }
 
-/* Active Page Indicator */
-.active-page {
-    background: var(--primary) !important; /* Solid colour instead of gradient */
-    color: white !important;
-    font-weight: 600;
+/* DaisyUI Component Tweaks */
+.navbar {
+    backdrop-filter: blur(8px);
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
-/* Mobile Menu Active Link */
-.menu li > a.active {
-    background: var(--primary); /* Solid colour */
-    color: white;
-    font-weight: 600;
-}
-
-
-.gradient-text {
-    color: var(--primary);
-}
-
-/* Card Hover Effects */
 .card {
-    transition: transform 200ms ease-in-out, box-shadow 200ms ease-in-out;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 20px 25px -5px rgba(147, 51, 234, 0.2),
-                0 10px 10px -5px rgba(147, 51, 234, 0.1);
 }
 
-/* Button Hover Effects */
-.btn {
-    transition: all 200ms ease-in-out;
+/* Range Slider Custom Styling to match Purple Brand */
+input[type="range"].range-primary {
+    --range-shdw: var(--primary-purple);
 }
 
-.btn:hover {
-    transform: translateY(-2px);
+/* Comparison Chart Container */
+#comparisonChart {
+    max-height: 600px;
+    width: 100% !important;
 }
 
-/* Phone Card Styles */
-.phone-card {
-    background: var(--base-100);
-    border-radius: 1rem;
-    padding: 1.5rem;
-    border: 2px solid var(--base-300);
-    transition: all 200ms ease-in-out;
-    cursor: pointer;
+/* Animation for the Loading Spinner */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }   
 }
 
-.phone-card:hover {
-    border-color: var(--primary);
-    transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(147, 51, 234, 0.15);
-}
-
-.phone-card.selected {
-    border-color: var(--primary);
-    background: rgba(147, 51, 234, 0.05); /* Flat solid colour */
-}
-
-/* Table Styles */
-.table thead th {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: var(--primary);
-    color: white;
-    font-weight: 600;
-}
-
-.table tbody tr {
-    transition: background-color 150ms ease-in-out;
-}
-
-.table tbody tr:hover {
-    background: rgba(147, 51, 234, 0.05);
-}
-
-/* Sort Icons */
-th[data-sort] {
-    user-select: none;
-}
-
-th[data-sort]:hover {
-    background: var(--primary-focus) !important;
-}
-
-th[data-order="asc"] .fa-sort::before {
-    content: "\f160"; 
-}
-
-th[data-order="desc"] .fa-sort::before {
-    content: "\f161"; 
-}
-
-/* Mobile Card View */
-.mobile-spec-card {
-    background: var(--base-100);
-    border: 2px solid var(--base-300);
-    border-radius: 1rem;
-    padding: 1.5rem;
-    transition: all 200ms ease-in-out;
-}
-
-.mobile-spec-card:hover {
-    border-color: var(--primary);
-    box-shadow: 0 4px 12px rgba(147, 51, 234, 0.15);
-}
-
-/* Chart Container */
-.chart-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
-/* Loading State */
-.loading-spinner {
-    color: var(--primary);
-}
-
-/* Stats Styling */
-.stat {
-    transition: all 200ms ease-in-out;
-}
-
-.stat:hover {
-    transform: scale(1.05);
-}
-
-.stat-value {
-    color: var(--primary); /* flat colour */
-}
-
-/* Badge Styling */
-.badge {
-    transition: all 200ms ease-in-out;
-}
-
-.badge:hover {
-    transform: scale(1.05);
-}
-
-/* Alert Styling */
-.alert {
-    border-left: 4px solid var(--primary);
-}
-
-/* Input Focus Styles */
-.input:focus,
-.select:focus,
-.textarea:focus {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
-    border-color: var(--primary);
-}
-
-/* Dropdown Menu */
-.dropdown-content {
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-}
-
-/* Animation Classes */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.fade-in {
-    animation: fadeIn 400ms ease-out;
-}
-
-@keyframes slideInRight {
-    from {
-        opacity: 0;
-        transform: translateX(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.slide-in-right {
-    animation: slideInRight 400ms ease-out;
-}
-
-/* Pulse Animation for Hero Icon */
-@keyframes pulse-purple {
-    0%, 100% {
-        box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.7);
-    }
-    50% {
-        box-shadow: 0 0 0 20px rgba(147, 51, 234, 0);
-    }
-}
-
-.animate-pulse {
-    animation: pulse-purple 2s infinite;
-}
-
-/* Responsive Utilities */
+/* Mobile Responsiveness for Tables */
 @media (max-width: 768px) {
-    h1 {
-        font-size: 2rem;
-        color: var(--secondary); /* high contrast hero title */
-    }
-    
-    h2 {
-        font-size: 1.5rem;
-        color: var(--secondary); /* high contrast subtitle */
-    }
-    
-    .phone-card {
-        width: 100%;
-    }
-    
-    .card-body {
-        padding: 1rem;
+    .overflow-x-auto {
+        -webkit-overflow-scrolling: touch;
     }
 }
 
-
-@media (prefers-contrast: high) {
-    .btn,
-    .input,
-    .select,
-    .card {
-        border-width: 2px;
-    }
+/* Utilities */
+.text-gradient {
+    background: linear-gradient(to right, var(--primary-purple), var(--secondary-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-/* Reduced Motion Support */
-@media (prefers-reduced-motion: reduce) {
-    *,*::before,*::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-@media print {
-    .navbar,
-    .footer,
-    .btn,
-    .theme-toggle {
-        display: none;
-    }
-    
-    body {
-        background: white;
-        color: black;
-    }
-    
-    .card {
-        box-shadow: none;
-        border: 1px solid #ddd;
-    }
-}
-
-
-*:focus-visible {
-    outline: 3px solid var(--primary);
-    outline-offset: 3px;
-}
-
-
-.skip-link {
-    position: absolute;
-    top: -100px;
-    left: 0;
-    background: var(--primary);
-    color: white;
-    padding: 0.5rem 1rem;
-    text-decoration: none;
-    z-index: 100;
-    border-radius: 0 0 0.5rem 0;
-}
-
-.skip-link:focus {
-    top: 0;
-}
-
-/* Custom Checkbox Radio Styling */
-.checkbox:checked,
-.radio:checked {
-    background-color: var(--primary);
-    border-color: var(--primary);
-}
-
-/* Toast Notifications */
-.toast {
-    background: var(--base-100);
-    border-left: 4px solid var(--primary);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
-
-/* Selected Phone Badge */
-.selected-badge {
-    background: var(--primary); /* solid colour */
-    color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-}
-
-/* No Results Message */
 .no-results {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--base-content);
-    opacity: 0.7;
+    animation: fadeIn 0.5s ease-in;
 }
 
-.no-results i {
-    font-size: 4rem;
-    color: var(--primary);
-    margin-bottom: 1rem;
-}
-
-/* Comparison Chart Legend */
-.chart-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 1rem;
-}
-
-.chart-legend-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-}
-
-.chart-legend-color {
-    width: 1rem;
-    height: 1rem;
-    border-radius: 0.25rem;
-}
-
-/* Export Button Loading State */
-.btn.loading::after {
-    border-color: white transparent transparent transparent;
-}
-
-/* Table Responsive Wrapper */
-.table-wrapper {
-    border-radius: 1rem;
-    overflow: hidden;
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }

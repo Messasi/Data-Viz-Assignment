@@ -60,27 +60,60 @@ function renderPhones(phones) {
     container.innerHTML = phones.map(phone => {
         const isSelected = selectedPhones.find(p => p.id === phone.id);
         return `
-        <div class="phone-card ${isSelected ? 'selected' : ''}" data-id="${phone.id}">
-            <div class="flex justify-between items-start mb-3">
-                <div>
-                    <h3 class="font-semibold text-lg">${phone.brand}</h3>
-                    <p class="text-sm text-base-content/70">${phone.model}</p>
-                </div>
-                <span class="badge badge-primary text-white">${formatPrice(phone.price)}</span>
+    <div class="group relative bg-white rounded-2xl p-5 border-2 transition-all duration-300 
+        ${isSelected ? 'border-purple-600 ring-4 ring-purple-50' : 'border-gray-100 hover:border-purple-200 hover:shadow-xl'}">
+        
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <h3 class="font-bold text-gray-800 text-lg tracking-tight">${phone.brand}</h3>
+                <p class="text-sm text-gray-500 font-medium">${phone.model}</p>
             </div>
-            <div class="grid grid-cols-2 gap-2 text-sm mb-4">
-                <div><i class="fas fa-memory text-purple-600 mr-1"></i><span class="text-base-content/70">RAM:</span> <strong>${phone.ram_gb}GB</strong></div>
-                <div><i class="fas fa-hdd text-purple-600 mr-1"></i><span class="text-base-content/70">Storage:</span> <strong>${phone.storage_gb}GB</strong></div>
-                <div><i class="fas fa-battery-full text-purple-600 mr-1"></i><span class="text-base-content/70">Battery:</span> <strong>${phone.battery_mah}mAh</strong></div>
-                <div><i class="fas fa-mobile-alt text-purple-600 mr-1"></i><span class="text-base-content/70">Display:</span> <strong>${phone.display_inches}"</strong></div>
-            </div>
-            <button class="compare-btn btn btn-sm btn-primary w-full text-white" data-id="${phone.id}">
-                <i class="fas fa-${isSelected ? 'check' : 'plus'} mr-2"></i>
-                ${isSelected ? 'Selected' : 'Compare'}
-            </button>
+            <span class="px-3 py-1 bg-purple-600 text-white text-xs font-bold rounded-full shadow-sm">
+                ${formatPrice(phone.price)}
+            </span>
         </div>
+
+        <div class="grid grid-cols-2 gap-y-3 gap-x-2 text-xs mb-6">
+            <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center">
+                    <i class="fas fa-memory text-purple-600"></i>
+                </div>
+                <span class="text-gray-600"><strong>${phone.ram_gb}GB</strong> RAM</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center">
+                    <i class="fas fa-hdd text-purple-600"></i>
+                </div>
+                <span class="text-gray-600"><strong>${phone.storage_gb}GB</strong> Storage</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center">
+                    <i class="fas fa-battery-full text-purple-600"></i>
+                </div>
+                <span class="text-gray-600"><strong>${phone.battery_mah}</strong> mAh</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center">
+                    <i class="fas fa-mobile-alt text-purple-600"></i>
+                </div>
+                <span class="text-gray-600"><strong>${phone.display_inches}"</strong> Screen</span>
+            </div>
+        </div>
+
+        <button onclick="toggleCompare(${phone.id})" 
+            class="w-full py-2.5 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2
+            ${isSelected 
+                ? 'bg-red-50 text-red-600 border border-red-100 hover:bg-red-100' 
+                : 'bg-purple-600 text-white hover:bg-purple-600 '}">
+            <i class="fas fa-${isSelected ? 'trash-alt' : 'plus'}"></i>
+            ${isSelected ? 'Remove' : 'Compare Now'}
+        </button>
+    </div>
         `;
     }).join('');
+
+    
+
 
     // Attach click listeners to all compare buttons
     container.querySelectorAll('.compare-btn').forEach(btn => {
@@ -127,7 +160,7 @@ function toggleCompare(phoneId) {
         }
     }
 
-    // Re-apply filters instead of showing all phones
+    // Reapply filters instead of showing all phones
     if (typeof applyFilters === 'function') {
         applyFilters(); //apply filters to upate
     } else {
@@ -143,26 +176,27 @@ function toggleCompare(phoneId) {
 function updateSelectedCount() { 
     const count = selectedPhones.length;
 
-    // 1. Update the Purple Alert Bar (You said this works)
+    //Update the Purple Counter
     const selectedCountEl = document.getElementById('selectedCount');
     if (selectedCountEl) {
         selectedCountEl.textContent = count;
     }
 
-    // 2. Update the Grey Chart Badge
+    //Get the grey counter element
     const chartCompareCountEl = document.getElementById('chartCompareCount');
     
+    //Update the grey counter with dynamic colour stlying based on count
     if (chartCompareCountEl) {
-        console.log("Updating grey counter to:", count); // Check your console for this!
+        console.log("Updating grey counter to:", count); // Check the count value being set
         chartCompareCountEl.textContent = `Comparing ${count}/5 phones`;
         
         // Update the styling
         if (count === 5) {
-            chartCompareCountEl.className = "badge badge-error text-white font-semibold py-3 px-4";
+            chartCompareCountEl.className = "inline-block bg-gray-400 text-white font-semibold py-2 px-4 rounded-lg text-sm mb-4";
         } else if (count > 0) {
-            chartCompareCountEl.className = "badge badge-primary text-white font-semibold py-3 px-4";
+            chartCompareCountEl.className = "inline-block bg-purple-100 text-white-600 font-semibold py-2 px-4 rounded-lg text-sm mb-4";
         } else {
-            chartCompareCountEl.className = "badge badge-ghost font-semibold py-3 px-4 opacity-50";
+            chartCompareCountEl.className = "inline-block bg-gray-100 text-gray-600 font-semibold py-2 px-4 rounded-lg text-sm mb-4";
         }
     } else {
         console.warn("Could not find the element with ID: chartCompareCount");
@@ -185,18 +219,26 @@ function updateSelectedPhonesList() {
     }
     
     container.innerHTML = selectedPhones.map((phone, index) => `
-        <div class="flex items-center justify-between p-2 bg-base-200 rounded-lg">
-            <div class="flex items-center gap-2">
-                <div class="w-3 h-3 rounded-full" 
-                     style="background-color: ${getPhoneColor(index)}"></div>
-                <span class="text-sm font-medium">${phone.brand} ${phone.model}</span>
+    <div class="flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-200 transition-colors">
+        <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full shadow-sm" 
+                 style="background-color: ${getPhoneColor(index)}"></div>
+            
+            <div class="flex flex-col">
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-tight leading-none mb-1">${phone.brand}</span>
+                <span class="text-sm font-semibold text-gray-700 leading-none">${phone.model}</span>
             </div>
-            <button class="btn btn-ghost btn-xs" onclick="toggleCompare(${phone.id})">
-                <i class="fas fa-times"></i>
-            </button>
         </div>
-    `).join('');
+        
+        <button class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all" 
+                onclick="toggleCompare(${phone.id})"
+                title="Remove from comparison">
+            <i class="fas fa-times text-sm"></i>
+        </button>
+    </div>
+`).join('');
 }
+
 
 function getPhoneColor(index) {
     const colors = ['#6366F1', '#EF4444', '#10B981', '#F59E0B', '#8B5CF6'];

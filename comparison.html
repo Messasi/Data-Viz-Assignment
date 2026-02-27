@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <style>
@@ -19,224 +18,201 @@
     </style>
 </head>
 <body class="transition-colors duration-300">
-    <!-- Navigation -->
-    <nav class="navbar bg-base-100 shadow-lg px-4 lg:px-8 sticky top-0 z-50">
 
-  <div class="navbar-start">
-        <!-- Mobile hamburger -->
-        <div class="dropdown lg:hidden">
-            <label tabindex="0" class="btn btn-ghost btn-circle">
-                <i class="fas fa-bars text-xl"></i>
-            </label>
-            <ul tabindex="0"
-                class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-lg bg-base-100 rounded-box w-52">
-                <li><a href="index.html"><i class="fas fa-home mr-2"></i>Home</a></li>
-                <li><a href="comparison.html"><i class="fas fa-balance-scale mr-2"></i>Comparison</a></li>
-                <li><a href="specifications.html"><i class="fas fa-table mr-2"></i>Specifications</a></li>
+    <!-- Navigation-->
+    <nav class="flex items-center justify-between bg-white shadow-lg px-4 lg:px-8 sticky top-0 z-50 h-16">
+
+        <div class="flex items-center">
+            <div class="lg:hidden relative group">
+                <button class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                <ul class="absolute top-full left-0 mt-3 z-[1] p-2 shadow-lg bg-white rounded-xl w-52 hidden group-hover:block border border-gray-100">
+                    <li><a href="index.html" class="flex items-center p-2 hover:bg-gray-50 rounded-lg"><i class="fas fa-home mr-2"></i>Home</a></li>
+                    <li><a href="comparison.html" class="flex items-center p-2 hover:bg-gray-50 rounded-lg text-purple-600 font-bold"><i class="fas fa-balance-scale mr-2"></i>Comparison</a></li>
+                    <li><a href="specifications.html" class="flex items-center p-2 hover:bg-gray-50 rounded-lg"><i class="fas fa-table mr-2"></i>Specifications</a></li>
+                </ul>
+            </div>
+
+            <a href="index.html" class="hidden lg:flex items-center text-2xl font-bold text-purple-600">
+                <i class="fas mr-2"></i>
+                MobileMatrix
+            </a>
+        </div>
+
+        <div class="flex items-center">
+            <a href="index.html" class="lg:hidden text-xl font-bold text-purple-600">
+                MobileMatrix
+            </a>
+
+            <ul class="hidden lg:flex items-center gap-6"> 
+                <li><a href="index.html" class="px-4 py-2 hover:bg-gray-100 rounded-lg transition-colors font-medium text-sm">Home</a></li>
+                <li><a href="comparison.html" class="px-4 py-2 bg-purple-50 text-purple-600 rounded-lg font-bold text-sm">Comparison</a></li>
+                <li><a href="specifications.html" class="px-4 py-2 hover:bg-gray-100 rounded-lg transition-colors font-medium text-sm">Specifications</a></li>
             </ul>
         </div>
 
-        <!-- Desktop -->
-        <a href="index.html"
-           class="hidden lg:flex items-center text-2xl font-bold text-secondary">
-            <i class="fas mr-2"></i>
-            MobileMatrix
-        </a>
-    </div>
+    </nav>
 
-   
-    <div class="navbar-center">
-        <!-- Mobile title -->
-        <a href="index.html"
-           class="lg:hidden text-xl font-bold text-secondary">
-            MobileMatrix
-        </a>
-
-        <!-- Desktop navigation -->
-        <ul class="hidden lg:flex menu menu-horizontal gap-2">
-            <li><a href="index.html" class="btn btn-ghost btn-sm">Home</a></li>
-            <li><a href="comparison.html" class="btn btn-ghost btn-sm active-page">Comparison</a></li>
-            <li><a href="specifications.html" class="btn btn-ghost btn-sm">Specifications</a></li>
-        </ul>
-    </div>
-
-    <div class="navbar-end">
-        <label class="swap swap-rotate btn btn-ghost btn-circle">
-            <input type="checkbox" id="themeToggle" />
-            <i class="fas fa-sun swap-on text-xl"></i>
-            <i class="fas fa-moon swap-off text-xl"></i>
-        </label>
-    </div>
-</nav>
-
-    <!-- Main -->
-    <main class="min-h-screen bg-base-200 transition-colors duration-300">
-        <!-- Page Header -->
+    <!-- Main Content -->
+     
+    <main class="min-h-screen bg-gray-100 transition-colors duration-300">
         <div class="bg-purple-600 text-white py-8 px-4">
             <div class="container mx-auto">
                 <h1 class="text-3xl md:text-4xl font-bold mb-2">
-                    <i class="fas  mr-3"></i>Smartphone Comparison
+                    <i class="fas mr-3"></i>Smartphone Comparison
                 </h1>
                 <p class="text-purple-100 text-sm md:text-base">Compare up to 5 smartphones side-by-side</p>
             </div>
         </div>
-
+        <!--Filters Section-->
         <div class="container mx-auto px-4 py-8">
-            <!-- Filters Section -->
-           <div class="card bg-base-100 shadow-xl mb-6 border border-base-200 overflow-hidden transition-colors duration-300">
-    <div class="bg-base-200/30 px-6 py-4 flex justify-between items-center border-b border-base-200">
-        <h2 class="font-bold text-3xl tracking-tight text-base-content">
-            Filters
-        </h2>
-        <button id="clearFilters" class="btn btn-ghost btn-sm hover:bg-primary/10 text-primary gap-2">
-            Reset All
-        </button>
-    </div>
-
-    <div class="card-body p-6 md:p-8">
-        <div class="mb-6">
-            <label class="label pt-0">
-                <span class="label-text font-bold text-base-content/70">What are you looking for?</span>
-            </label>
-            <div class="relative">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-base-content/40">
-                    <i class="fas fa-search"></i>
-                </span>
-                <input type="text" id="searchInput" placeholder="Search by model, brand or specifications..." 
-                       class="input input-bordered w-full pl-11 h-12 bg-base-200/30 focus:bg-base-100 transition-all border-base-300 focus:border-primary" />
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pt-6 border-t border-base-200">
-            
-            <div class="form-control">
-                <div class="flex justify-between items-end mb-4">
-                    <span class="text-xs font-bold uppercase tracking-wider opacity-60">Budget Cap</span>
-                    <span class="text-lg font-mono font-bold font-bold" id="priceDisplay">£2000</span>
+            <div class="bg-white rounded-2xl shadow-xl mb-6 border border-gray-200 overflow-hidden transition-colors duration-300">
+                <div class="bg-gray-50 px-6 py-4 flex justify-between items-center border-b border-gray-200">
+                    <h2 class="font-bold text-3xl tracking-tight text-gray-800">
+                        Filters
+                    </h2>
+                    <button id="clearFilters" class="px-4 py-2 text-purple-600 hover:bg-purple-50 rounded-lg font-bold transition-all flex items-center gap-2">
+                        Reset All
+                    </button>
                 </div>
-                <input type="range" id="priceSlider" min="0" max="2000" value="2000" class="range range-primary range-xs" step="50" 
-                       oninput="document.getElementById('priceDisplay').innerText = '£' + this.value" />
-                <div class="flex justify-between w-full px-1 mt-2">
-                    <span class="text-[10px] font-bold opacity-40">£0</span>
-                    <span class="text-[10px] font-bold opacity-40">£2000</span>
-                </div>
-            </div>
 
-            <div class="form-control">
-                <label class="label-text font-bold text-xs uppercase opacity-60 mb-2">Manufacturer</label>
-                <select id="brandFilter" class="select select-bordered select-md bg-base-200/30 border-base-300 focus:border-primary">
-                    <option value="">All Brands</option>
-                    <option value="Apple">Apple</option>
-                    <option value="Samsung">Samsung</option>
-                    <option value="Google">Google</option>
-                    <option value="OnePlus">OnePlus</option>
-                    <option value="Xiaomi">Xiaomi</option>
-                </select>
-            </div>
+                <div class="p-6 md:p-8">
+                    <div class="mb-6">
+                        <label class="block text-sm font-bold text-gray-500 mb-2">What are you looking for?</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" id="searchInput" placeholder="Search by model, brand or specifications..." 
+                                   class="w-full pl-11 pr-4 py-3 bg-gray-100 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-600 outline-none transition-all" />
+                        </div>
+                    </div>
 
-            <div class="form-control">
-                <label class="label-text font-bold text-xs uppercase opacity-60 mb-2">Memory (RAM)</label>
-                <div class="join w-full">
-                    <input class="join-item btn btn-md flex-1 bg-base-200/30 border-base-300 hover:border-primary checked:bg-primary checked:text-white" type="radio" name="ram" id="ramAny" aria-label="Any" value="" checked />
-                    <input class="join-item btn btn-md flex-1 bg-base-200/30 border-base-300 hover:border-primary checked:bg-primary checked:text-white" type="radio" name="ram" id="ram8" aria-label="8GB+" value="8" />
-                    <input class="join-item btn btn-md flex-1 bg-base-200/30 border-base-300 hover:border-primary checked:bg-primary checked:text-white" type="radio" name="ram" id="ram12" aria-label="12GB+" value="12" />
-                </div>
-            </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pt-6 border-t border-gray-200">
+                        
+                        <div class="flex flex-col">
+                            <div class="flex justify-between items-end mb-4">
+                                <span class="text-xs font-bold uppercase tracking-wider opacity-60">Budget Cap</span>
+                                <span class="text-lg font-mono font-bold" id="priceDisplay">£2000</span>
+                            </div>
+                            <input type="range" id="priceSlider" min="0" max="2000" value="2000" step="50" 
+                                   class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-purple-600" 
+                                   oninput="document.getElementById('priceDisplay').innerText = '£' + this.value" />
+                            <div class="flex justify-between w-full px-1 mt-2">
+                                <span class="text-[10px] font-bold opacity-40">£0</span>
+                                <span class="text-[10px] font-bold opacity-40">£2000</span>
+                            </div>
+                        </div>
 
-            <div class="form-control">
-                            <span class="text-sm font-bold uppercase opacity-50 mb-2">Storage</span>
-                            <div class="flex items-center gap-7 bg-base-200/30 p-4 px-3 rounded-xl border border-base-300">
+                        <div class="flex flex-col">
+                            <label class="text-xs font-bold uppercase opacity-60 mb-2">Manufacturer</label>
+                            <select id="brandFilter" class="p-3 bg-gray-100 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-purple-600 transition-all">
+                                <option value="">All Brands</option>
+                                <option value="Apple">Apple</option>
+                                <option value="Samsung">Samsung</option>
+                                <option value="Google">Google</option>
+                                <option value="OnePlus">OnePlus</option>
+                                <option value="Xiaomi">Xiaomi</option>
+                            </select>
+                        </div>
+
+                        <div class="flex flex-col">
+                            <label class="text-xs font-bold uppercase opacity-60 mb-2">Memory (RAM)</label>
+                            <div class="flex w-full rounded-xl overflow-hidden border border-gray-300">
+                                <input class="hidden peer/any" type="radio" name="ram" id="ramAny" value="" checked />
+                                <label for="ramAny" class="flex-1 py-3 text-center bg-gray-100 hover:bg-gray-200 cursor-pointer peer-checked/any:bg-purple-600 peer-checked/any:text-white transition-all text-sm font-bold">Any</label>
+                                
+                                <input class="hidden peer/8" type="radio" name="ram" id="ram8" value="8" />
+                                <label for="ram8" class="flex-1 py-3 text-center bg-gray-100 hover:bg-gray-200 cursor-pointer border-l border-gray-300 peer-checked/8:bg-purple-600 peer-checked/8:text-white transition-all text-sm font-bold">8GB+</label>
+                                
+                                <input class="hidden peer/12" type="radio" name="ram" id="ram12" value="12" />
+                                <label for="ram12" class="flex-1 py-3 text-center bg-gray-100 hover:bg-gray-200 cursor-pointer border-l border-gray-300 peer-checked/12:bg-purple-600 peer-checked/12:text-white transition-all text-sm font-bold">12GB+</label>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold uppercase opacity-60 mb-2">Storage</span>
+                            <div class="flex items-center justify-between bg-gray-100 p-4 rounded-xl border border-gray-300">
                                 <label class="flex items-center gap-2 cursor-pointer group">
-                                    <input type="checkbox" name="storage" value="128" class="custom-checkbox" />
-                                    <span class="text-xs font-bold opacity-70 group-hover:opacity-100 group-hover:text-primary transition-all">128GB</span>
+                                    <input type="checkbox" name="storage" value="128" class="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-600" />
+                                    <span class="text-xs font-bold opacity-70 group-hover:opacity-100 group-hover:text-purple-600 transition-all">128GB</span>
                                 </label>
-                                <div class="w-[1px] h-4 bg-base-300"></div>
+                                <div class="w-[1px] h-4 bg-gray-300"></div>
                                 <label class="flex items-center gap-2 cursor-pointer group">
-                                    <input type="checkbox" name="storage" value="256" class="custom-checkbox" />
-                                    <span class="text-xs font-bold opacity-70 group-hover:opacity-100 group-hover:text-primary transition-all">256GB</span>
+                                    <input type="checkbox" name="storage" value="256" class="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-600" />
+                                    <span class="text-xs font-bold opacity-70 group-hover:opacity-100 group-hover:text-purple-600 transition-all">256GB</span>
                                 </label>
-                                <div class="w-[1px] h-4 bg-base-300"></div>
+                                <div class="w-[1px] h-4 bg-gray-300"></div>
                                 <label class="flex items-center gap-2 cursor-pointer group">
-                                    <input type="checkbox" name="storage" value="512" class="custom-checkbox" />
-                                    <span class="text-xs font-bold opacity-70 group-hover:opacity-100 group-hover:text-primary transition-all">512GB</span>
+                                    <input type="checkbox" name="storage" value="512" class="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-600" />
+                                    <span class="text-xs font-bold opacity-70 group-hover:opacity-100 group-hover:text-purple-600 transition-all">512GB</span>
                                 </label>
                             </div>
                         </div>
-            
-        </div>
-    </div>
-</div>
+                    </div>
+                </div>
+            </div>
 
-            <!-- Results Info -->
-            <div class="alert shadow-lg mb-6 transition-colors duration-300">
-                <div>
+            <div class="bg-white p-4 rounded-xl shadow-lg mb-6 border border-gray-100 transition-colors duration-300">
+                <div class="flex items-center gap-3">
                     <i class="fas fa-info-circle text-purple-600"></i>
-                    <span>
-                        <span class="font-semibold">Selected: <span id="selectedCount">0</span>/5 phones</span> | 
+                    <span class="text-gray-700">
+                        <span class="font-semibold">Selected: <span id="selectedCount">0</span>/5 phones</span> |
                         Showing <span id="resultCount">0</span> of <span id="totalCount">20</span> phones
                     </span>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-                <!-- Phone Grid -->
                 <div class="xl:col-span-2">
-                    <div class="card bg-base-100 shadow-xl transition-colors duration-300">
-                        <div class="card-body">
-                            <h2 class="card-title text-purple-600">
-                                <i class="fas fa-mobile-alt mr-2"></i>Available Phones
-                            </h2>
-                            <div id="phoneContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                                <div class="text-center col-span-full py-8">
-                                    <span class="loading loading-spinner loading-lg text-purple-600"></span>
-                                    <p class="mt-4 text-base-content/60">Loading smartphones...</p>
-                                </div>
+                    <div class="bg-white rounded-2xl shadow-xl transition-colors duration-300 p-6 border border-gray-100">
+                        <h2 class="text-xl font-bold text-purple-600 flex items-center mb-6">
+                            <i class="fas fa-mobile-alt mr-2"></i>Available Phones
+                        </h2>
+                        <div id="phoneContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 h-[750px] overflow-y-auto pr-2 custom-scrollbar">
+                            <div class="text-center col-span-full py-8">
+                                <div class="inline-block w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+                                <p class="mt-4 text-gray-500">Loading smartphones...</p>
+                            </div>          
+                            <div id="noResults" class="hidden text-center py-10">
+                            <i class="fas fa-search text-gray-300 text-4xl mb-4"></i>
+                            <p class="text-gray-500">No phones found matching your search.</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Chart Section -->
                 <div class="xl:col-span-1">
-                    <div class="card bg-base-100 shadow-xl sticky top-24 transition-colors duration-300">
-                        <div class="card-body">
-                                <h2 class="card-title text-purple-600">
-                                <i class="fas fa-chart-bar mr-2"></i>Comparison Chart
-                            </h2>
-                            <span id="chartCompareCount" class="badge badge-ghost font-semibold py-3 px-4">
-                                 Comparing 0/5 phones
-                            </span>
-                            
-                            <!-- Metric Toggle -->
-                            <div class="form-control mb-4">
-                                <label class="label">
-                                    <span class="label-text font-medium">Compare by:</span>
-                                </label>
-                                <select id="metricSelect" class="select select-bordered select-sm w-full">
-                                    <option value="overview">Overview (Radar)</option>
-                                    <option value="price">Price</option>
-                                    <option value="ram">RAM (GB)</option>
-                                    <option value="storage">Storage (GB)</option>
-                                    <option value="battery">Battery (mAh)</option>
-                                    <option value="display">Display (inches)</option>
-                                    <option value="camera">Camera (MP)</option>
-                                </select>
-                            </div>
+                    <div class="bg-white rounded-2xl shadow-xl sticky top-24 transition-colors duration-300 p-6 border border-gray-100">
+                        <h2 class="text-xl font-bold text-purple-600 flex items-center mb-4">
+                            <i class="fas fa-chart-bar mr-2"></i>Comparison Chart
+                        </h2>
+                        <span id="chartCompareCount" class="inline-block bg-gray-100 text-gray-600 font-semibold py-2 px-4 rounded-lg text-sm mb-4">
+                             Comparing 0/5 phones
+                        </span>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Compare by:</label>
+                            <select id="metricSelect" class="w-full p-2 bg-white border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-purple-600 transition-all text-sm">
+                                <option value="overview">Overview (Radar)</option>
+                                <option value="price">Price</option>
+                                <option value="ram">RAM (GB)</option>
+                                <option value="storage">Storage (GB)</option>
+                                <option value="battery">Battery (mAh)</option>
+                                <option value="display">Display (inches)</option>
+                                <option value="camera">Camera (MP)</option>
+                            </select>
+                        </div>
 
-                            <!-- Chart Canvas -->
-                            <div class="w-full" style="height: 300px;">
-                                <canvas id="comparisonChart"></canvas>
-                            </div>
+                        <div class="w-full h-[300px]">
+                            <canvas id="comparisonChart"></canvas>
+                        </div>
 
-                            <div id="chartDescription" class="bg-base-200 p-4 rounded-lg mb-4 text-sm">
-                            </div>
+                        <div id="chartDescription" class="bg-gray-50 p-4 rounded-xl mt-4 text-sm text-gray-600 border border-gray-100">
+                        </div>
 
-                            
-
-                            <!-- Selected Phones List -->
-                            <div id="selectedPhonesList" class="mt-4 space-y-2">
-                                
-                            </div>
+                        <div id="selectedPhonesList" class="mt-4 space-y-2">
                         </div>
                     </div>
                 </div>
@@ -244,45 +220,28 @@
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer footer-center p-6 bg-base-200 text-base-content transition-colors duration-300">
-        <aside>
-            <p class="font-semibold">
+    <footer class="bg-gray-100 p-10 mt-10 transition-colors duration-300">
+        <div class="flex flex-col items-center justify-center text-center">
+            <p class="font-bold text-lg mb-2">
                 <i class="fas text-purple-600 mr-2"></i>
                 MobileMatrix 
             </p>
-            <p class="text-sm opacity-70">Making phone comparison simple and visual</p>
-            <p class="text-xs opacity-50 mt-2">© 2025 MobileMatrix. All rights reserved.</p>
-        </aside>
+            <p class="text-sm text-gray-500">Making phone comparison simple and visual</p>
+            <p class="text-xs text-gray-400 mt-4">© 2025 MobileMatrix. All rights reserved.</p>
+        </div>
     </footer>
 
-    <!-- Theme Toggle  -->
     <script>
         const themeToggle = document.getElementById('themeToggle');
         const html = document.documentElement;
-        
-        // Check for saved theme preference
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        html.setAttribute('data-theme', currentTheme);
-        themeToggle.checked = currentTheme === 'dark';
-        
-        themeToggle.addEventListener('change', function() {
-            if (this.checked) {
-                html.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                html.setAttribute('data-theme', 'light');
-                localStorage.setItem('theme', 'light');
-            }
-        });
+        // Forced to light mode for refactoring 
+        html.setAttribute('data-theme', 'light');
     </script>
 
-<!--Scripts for js files-->
-
-   <script src="js/utils.js"></script>
-<script src="js/filters.js"></script>
-<script src="js/app.js"></script>
-<script src="js/charts.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/charts.js"></script>
 
 </body>
 </html>

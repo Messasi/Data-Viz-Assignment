@@ -51,27 +51,40 @@ function updateChart() {
     console.log("Chart updated and new chart created");
 }
 
-
 function updateChartDescription(type) {
     const descriptionElement = document.getElementById('chartDescription');
     if (!descriptionElement) return;
 
+    // Determine the win condition text for the legend
+    const winCondition = (currentMetric === 'price') 
+        ? 'the lowest price' 
+        : 'the highest specification';
+
     if (type === 'radar') {
         descriptionElement.innerHTML = `
-            <strong>Radar View:</strong> The metrics are based on a percentage to 100% to keep the comparison fair 
-            For example, 100% RAM means that phone has the highest RAM in your selection. 
-            <em>Value</em> is inverted: a cheaper price gives a higher score.
+            <strong>Radar View:</strong> Showing normalised scores across all metrics for each phone. 
+            This allows you to see the overall strengths and weaknesses of each device in one view.
+            
         `;
     } else {
-        
-        descriptionElement.innerHTML = `
-            <strong>Bar View:</strong> Now showing actual values for <strong>${currentMetric.toUpperCase()}</strong>. 
+        const content = `
+            <strong>Bar View:</strong> Showing actual values for <strong>${currentMetric.toUpperCase()}</strong>. 
             This allows for a direct side by side comparison of the data.
         `;
+
+        // HTML Legend Key for the thick border
+        const legendKey = `
+            <div style="margin-top: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; display: inline-flex; align-items: center; gap: 12px; background-color: #f9f9f9;">
+                <div style="width: 30px; height: 15px; background: #eee; border: 3px solid #333; border-radius: 2px;"></div>
+                <span style="font-size: 0.9em; color: #333;">
+                    <strong>Best Result:</strong> The bar with the <strong>thick border</strong> represents the highest value for <strong>${currentMetric}</strong>.
+                </span>
+            </div>
+        `;
+        descriptionElement.innerHTML = content + legendKey;
     }
 }
 
-// Radar configuration and properties
 // Radar configuration and properties
 function getRadarConfig(phones) {
     // Find the max values to keep the chart fair (Normalisation)
@@ -83,9 +96,8 @@ function getRadarConfig(phones) {
     let maxPrice = Math.max(...phones.map(p => p.price)) || 1;
 
     // Detect dark mode for contrast
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const textColor = isDark ? '#FFFFFF' : '#666666';
-    const gridColor = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
+    const textColor = '#666666';
+    const gridColor = 'rgba(0, 0, 0, 0.1)';
 
     return {
         type: 'radar',
@@ -119,7 +131,10 @@ function getRadarConfig(phones) {
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    labels: { color: textColor } // Legend text color
+                    labels: { 
+                        color: textColor,
+                        boxWidth: 0 // Removes the color rectangle
+                    } // Legend text color
                 },
                 tooltip: {
                     callbacks: {
@@ -140,7 +155,7 @@ function getRadarConfig(phones) {
                     grid: { color: gridColor }, // Web lines color
                     angleLines: { color: gridColor }, // Diagonal lines color
                     pointLabels: {
-                        color: textColor, // RAM, Storage, etc. text color
+                        color: textColor, //text color
                         font: { family: 'Poppins', size: 12 }
                     }
                 }
@@ -154,28 +169,42 @@ function getBarConfig(phones) {
     let values = []; 
     let label = '';
 
+    // Data selection logic
     if (currentMetric === 'ram') {
-        values = phones.map(p => p.ram_gb);
+        values = phones.map(p => parseFloat(p.ram_gb));
         label = 'RAM (GB)';
     } else if (currentMetric === 'storage') {
-        values = phones.map(p => p.storage_gb);
+        values = phones.map(p => parseFloat(p.storage_gb));
         label = 'Storage (GB)';
     } else if (currentMetric === 'battery') {
-        values = phones.map(p => p.battery_mah);
+        values = phones.map(p => parseFloat(p.battery_mah));
         label = 'Battery (mAh)';
     } else if (currentMetric === 'display') {
-        values = phones.map(p => p.display_inches);
+        values = phones.map(p => parseFloat(p.display_inches));
         label = 'Display Size (Inches)';
     } else if (currentMetric === 'camera') {
-        values = phones.map(p => p.camera_mp);
+        values = phones.map(p => parseFloat(p.camera_mp));
         label = 'Camera (MP)';
     } else if (currentMetric === 'price') {
-        values = phones.map(p => p.price);
+        values = phones.map(p => parseFloat(p.price));
         label = 'Price (£)';
     }
 
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const textColor = isDark ? '#FFFFFF' : '#666666';
+    // Identify the Best Value (handling empty arrays with default)
+    const bestValue = (currentMetric === 'price') 
+        ? Math.min(...values) 
+        : Math.max(...values);
+
+     
+    const borderThicknesses = values.map(val => {
+    if (val === bestValue && val !== 0) {
+        return 4; // Thickkness for winner
+    } else {
+        return 1; 
+    }
+});
+
+    const textColor = '#666666';
 
     return {
         type: 'bar',
@@ -185,23 +214,27 @@ function getBarConfig(phones) {
                 label: label,
                 data: values,
                 backgroundColor: phones.map((p, i) => getPhoneColor(i).replace('rgb', 'rgba').replace(')', ', 0.7)')),
-                borderColor: phones.map((p, i) => getPhoneColor(i)),
-                borderWidth: 1
+                borderColor: phones.map((p, i) => borderThicknesses[i] > 1 ? '#0b0b0b' : getPhoneColor(i)), 
+                //set the border color to a dark colour if it's the best value, otherwise use the phone colour
+                borderWidth: borderThicknesses,
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: {
-                    labels: { color: textColor }
+                legend: { 
+                    labels: { 
+                        color: textColor,
+                        boxWidth: 0 // Removes the color rectangle
+                    } 
                 }
             },
             scales: {
                 y: { 
                     beginAtZero: true,
                     ticks: { color: textColor },
-                    grid: { color: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)' }
+                    grid: { color: 'rgba(0, 0, 0, 0.1)' }
                 },
                 x: {
                     ticks: { color: textColor }
@@ -221,5 +254,5 @@ function getPhoneColor(index) {
         'rgb(139, 92, 246)'  
     ];
     
-    return colors[index]; 
+    return colors[index % colors.length]; 
 }
