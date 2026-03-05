@@ -13,7 +13,7 @@ body {
     scroll-behavior: smooth;
 }
 
-/* Custom Scrollbar for better design */
+/* Custom Scrollbar for better design for different search engines*/
 ::-webkit-scrollbar {
     width: 8px;
 }

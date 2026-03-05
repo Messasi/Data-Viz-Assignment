@@ -83,7 +83,7 @@ try {
             $stmt->execute();
             $result = $stmt->get_result();
         } else {
-            // No filters, execute directly
+            // No filters  execute directly
             $result = $conn->query($sql);
         }
         
@@ -102,7 +102,7 @@ try {
     }
     
 } catch (Exception $e) {
-    // Handle errors gracefully
+    // Handle errors and return error response
     http_response_code(500);
     echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
 }

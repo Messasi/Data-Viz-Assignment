@@ -7,9 +7,23 @@ function initialiseChart() {
     updateChart(); // display empty chart 
     
     const metricSelect = document.getElementById('metricSelect');
-    if (metricSelect) {
-        metricSelect.addEventListener('change', handleMetricChange); // when the metric is changed instantly update chart
+    if (metricSelect) { // check if the element exists before adding event listener
+        metricSelect.addEventListener('change', handleMetricChange); // when the metric is changed instantly update chart through event listners of the select
     }
+
+    const adjustCanvasHeight = () => {
+        const canvas = document.getElementById('comparisonChart'); //get the element from the html
+        if (!canvas) return; // if the element is not found, exit the function
+
+        if (window.innerWidth < 768) {
+            canvas.parentNode.style.height = '400px'; // Taller on mobile 
+        } else {
+            canvas.parentNode.style.height = '300px'; // Standard on desktop
+        }
+    };
+
+    window.addEventListener('resize', adjustCanvasHeight); // Adjust height on window resize
+    adjustCanvasHeight(); // Run on load
 }
 
 function handleMetricChange(event) {
@@ -122,7 +136,7 @@ function getRadarConfig(phones) {
                     '£' + phone.price
                 ],
                 borderColor: getPhoneColor(index),
-                backgroundColor: getPhoneColor(index).replace('rgb', 'rgba').replace(')', ', 0.2)'),
+                backgroundColor: getPhoneColor(index).replace('rgb', 'rgba').replace(')', ', 0.05)'),
                 pointBackgroundColor: getPhoneColor(index)
             }))
         },
@@ -149,14 +163,16 @@ function getRadarConfig(phones) {
             },
             scales: {
                 r: {
-                    beginAtZero: true,
+                    min: 0,
                     max: 100,
-                    ticks: { display: false },
-                    grid: { color: gridColor }, // Web lines color
-                    angleLines: { color: gridColor }, // Diagonal lines color
+                    ticks: {
+                        stepSize: 20,
+                        showLabelBackdrop: false,
+                        //Lables 
+                        callback: (value) => value + '%'
+                    },
                     pointLabels: {
-                        color: textColor, //text color
-                        font: { family: 'Poppins', size: 12 }
+                        font: { size: 12, weight: 'bold' }
                     }
                 }
             }
