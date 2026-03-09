@@ -44,7 +44,7 @@ function updateChart() {
     // if statement to see chart type
     const targetType = (currentMetric === 'overview') ? 'radar' : 'bar';
 
-    // NEW: Update the text description above the chart
+    // Update the text description above the chart
     updateChartDescription(targetType);
 
     // remove previous chart type if it is there
@@ -52,15 +52,19 @@ function updateChart() {
         comparisonChart.destroy();
     }
 
-    // Generate Configuration
     let config;
-    if (targetType === 'radar') {
+    // logic to detect the Grouped Chart
+    if (currentMetric === 'GroupedPricing') {
+        updateChartDescription('bar'); // Use bar-style description
+        config = getGroupedPriceConfig(phones);
+    } else if (currentMetric === 'overview') {
+        updateChartDescription('radar');
         config = getRadarConfig(phones);
     } else {
+        updateChartDescription('bar');
         config = getBarConfig(phones);
     }
 
-    // Create New Chart
     comparisonChart = new Chart(ctx, config);
     console.log("Chart updated and new chart created");
 }
@@ -74,6 +78,8 @@ function updateChartDescription(type) {
         ? 'the lowest price' 
         : 'the highest specification';
 
+        
+
     if (type === 'radar') {
         descriptionElement.innerHTML = `
             <strong>Radar View:</strong> Showing normalised scores across all metrics for each phone. 
@@ -86,7 +92,13 @@ function updateChartDescription(type) {
             This allows for a direct side by side comparison of the data.
         `;
 
-        // HTML Legend Key for the thick border
+        // HTML Legend Key for the thick border only for the best value
+
+        if (currentMetric === 'GroupedPricing') {
+            descriptionElement.innerHTML = `
+                <strong>Grouped Bar Chart:</strong> Comparing the original launch price of each phone against its current market value in 2026.
+            `;
+        } else {
         const legendKey = `
             <div style="margin-top: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; display: inline-flex; align-items: center; gap: 12px; background-color: #f9f9f9;">
                 <div style="width: 30px; height: 15px; background: #eee; border: 3px solid #333; border-radius: 2px;"></div>
@@ -96,37 +108,42 @@ function updateChartDescription(type) {
             </div>
         `;
         descriptionElement.innerHTML = content + legendKey;
+        }
     }
 }
 
 // Radar configuration and properties
 function getRadarConfig(phones) {
     // Find the max values to keep the chart fair (Normalisation)
-    let maxRam = Math.max(...phones.map(p => p.ram_gb)) || 1;
-    let maxStorage = Math.max(...phones.map(p => p.storage_gb)) || 1;
-    let maxBattery = Math.max(...phones.map(p => p.battery_mah)) || 1;
+    let maxRam = Math.max(...phones.map(p => p.ram_gb)) || 1; //uses an arrow function as a quicker way to find the max vlaue without crashing code 
+    let maxStorage = Math.max(...phones.map(p => p.storage_gb)) || 1; // uses spread operator to fid max vlaue in arrray 
+    let maxBattery = Math.max(...phones.map(p => p.battery_mah)) || 1; //uses map operator to create an array of the battery values and then finds the max value in that array
     let maxDisplay = Math.max(...phones.map(p => p.display_inches)) || 1;
     let maxCamera = Math.max(...phones.map(p => p.camera_mp)) || 1;
     let maxPrice = Math.max(...phones.map(p => p.price)) || 1;
 
-    // Detect dark mode for contrast
+    
     const textColor = '#666666';
-    const gridColor = 'rgba(0, 0, 0, 0.1)';
+
 
     return {
-        type: 'radar',
+        type: 'radar', 
         data: {
-            labels: ['RAM', 'Storage', 'Battery', 'Display', 'Camera', 'Value'],
+            labels: ['RAM', 'Storage', 'Battery', 'Display', 'Camera', 'Price'], // the metrics to be compared
             datasets: phones.map((phone, index) => ({
                 label: phone.brand + ' ' + phone.model,
-                data: [
+                data: [ // normalisation for the radar chart 
                     (phone.ram_gb / maxRam) * 100,
                     (phone.storage_gb / maxStorage) * 100,
                     (phone.battery_mah / maxBattery) * 100,
                     (phone.display_inches / maxDisplay) * 100,
                     (phone.camera_mp / maxCamera) * 100,
-                    100 - (phone.price / maxPrice) * 100 
+                    100 - (phone.price / maxPrice) * 100,
                 ],
+
+            
+
+                
                 realWorldValues: [
                     phone.ram_gb + 'GB',
                     phone.storage_gb + 'GB',
@@ -255,6 +272,71 @@ function getBarConfig(phones) {
                 x: {
                     ticks: { color: textColor }
                 }
+            }
+        }
+    };
+}
+
+//Grouped Bar Chart configuration for Price vs Market Value
+function getGroupedPriceConfig(phones) {
+    const textColor = '#666666';
+
+    return {
+        type: 'bar',
+        data: {
+            // Extracts only the year from the YYYY-MM-DD release_date string
+            labels: phones.map(p => {
+                const year = p.release_date ? p.release_date.split('-')[0] : 'N/A';
+                return `${p.model} (${year})`;
+            }),
+            datasets: [
+                {
+                    label: 'Launch Price (£)',
+                    data: phones.map(p => parseFloat(p.price) || 0),
+                    backgroundColor: 'rgba(99, 102, 241, 0.7)',
+                    borderColor: 'rgb(99, 102, 241)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Market Value (2026) (£)',
+                    // Ensure 'MarketValue' matches your SQL column name exactly
+                    data: phones.map(p => parseFloat(p.MarketValue) || 0),
+                    backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                    borderColor: 'rgb(16, 185, 129)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    labels: { color: textColor, boxWidth: 20 }
+                },
+                tooltip: {
+                    callbacks: {
+                        footer: (items) => {
+                            if (items.length < 2) return '';
+                            const launch = items[0].raw;
+                            const current = items[1].raw;
+                            const loss = launch - current;
+                            const percent = ((loss / launch) * 100).toFixed(1);
+                            return `Value Lost: £${loss.toFixed(2)} (${percent}%)`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { 
+                        color: textColor,
+                        callback: (value) => '£' + value 
+                    }
+                },
+                x: { ticks: { color: textColor } }
             }
         }
     };
