@@ -158,7 +158,7 @@ function getRadarConfig(phones) {
             }))
         },
         options: {
-            responsive: true,
+            responsive: false,
             maintainAspectRatio: false,
             plugins: {
                 legend: {
@@ -253,7 +253,7 @@ function getBarConfig(phones) {
             }]
         },
         options: {
-            responsive: true,
+            responsive: false,
             maintainAspectRatio: false,
             plugins: {
                 legend: { 
@@ -308,7 +308,7 @@ function getGroupedPriceConfig(phones) {
             ]
         },
         options: {
-            responsive: true,
+            responsive: falses,
             maintainAspectRatio: false,
             plugins: {
                 legend: {
